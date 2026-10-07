@@ -2,20 +2,20 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>RBooSH v17 OFFLINE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+<title>RBooSH v18 OFFLINE</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ff8906">
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js?v=17').then(reg => {
+    navigator.serviceWorker.register('sw.js?v=18').then(reg => {
       reg.addEventListener('updatefound', () => {
         const nw = reg.installing;
         nw.addEventListener('statechange', () => {
           if(nw.state === 'installed' && navigator.serviceWorker.controller){
             window.updateAvailable = true;
-            showUpdateButtons('v17');
+            showUpdateButtons('v18');
           }
         });
       });
@@ -30,11 +30,13 @@ if('serviceWorker' in navigator){
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Tajawal',sans-serif}
-body{background:#0f0e17;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:6px}
+html{overscroll-behavior:none;overscroll-behavior-y:none}
+body{background:#0f0e17;color:#fff;width:100%;height:100%;position:fixed;overflow:hidden;overscroll-behavior:none;touch-action:none}
+#gameWrapper{width:100%;height:100%;overflow:auto;overscroll-behavior:none;overscroll-behavior-y:none;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;align-items:center;padding-top:6px;touch-action:pan-x pan-y}
 #h{width:95vw;max-width:420px;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;font-size:13px;font-weight:900;background:#1a1a2e;border-radius:14px;margin-bottom:6px;gap:6px}
 canvas{background:linear-gradient(#1a1a2e,#0f3460);border-radius:22px;border:4px solid #ff8906;width:95vw;height:75vh;max-width:420px;max-height:760px;aspect-ratio:9/16;display:block;touch-action:none}
 button{background:#ff8906;color:#000;border:none;padding:10px 16px;border-radius:50px;font-weight:900;font-size:13px;cursor:pointer;margin:3px}
-#ov,#shop,#adOv,#diffOv{position:absolute;inset:0;background:rgba(0,0,0,0.96);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;border-radius:22px;text-align:center;padding:14px;overflow-y:auto}
+#ov,#shop,#adOv,#diffOv{position:absolute;inset:0;background:rgba(0,0,0,0.96);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;border-radius:22px;text-align:center;padding:14px;overflow-y:auto;overscroll-behavior:none}
 #shop,#adOv,#diffOv{display:none}
 .skin{display:flex;justify-content:space-between;align-items:center;background:#1a1a2e;border:2px solid #333;border-radius:14px;padding:9px 10px;margin:5px 0;width:100%;max-width:400px}
 .skin.owned{border-color:#ff8906}.skin.selected{border-color:#00ff88;background:#12281e}
@@ -50,6 +52,7 @@ button{background:#ff8906;color:#000;border:none;padding:10px 16px;border-radius
 </style>
 </head>
 <body>
+<div id="gameWrapper">
 <div id="h">
 <div>🫓 <span id="score">0</span> <span id="offlineBadge" class="offlineBadge">OFFLINE ✅</span></div>
 <div>💰 <span id="coins">0</span></div>
@@ -72,11 +75,11 @@ button{background:#ff8906;color:#000;border:none;padding:10px 16px;border-radius
 <button onclick="shareGame()" style="background:#00ff88">📤 شارك وافتح 🥷</button>
 </div>
 <p style="color:#ffbe0b;margin-top:10px;font-weight:900">اختر الصعوبة:</p>
-<button class="diffBtn" onclick="pickDiff('easy')" style="background:#00ff88">🟢 مبتدأ</button>
-<button class="diffBtn" onclick="pickDiff('mid')" style="background:#ffbe0b">🟡 وسط</button>
-<button class="diffBtn" onclick="pickDiff('hard')" style="background:#ff4500;color:#fff">🔴 صعب</button>
+<button class="diffBtn" onclick="pickDiff('easy')" style="background:#00ff88">🟢 مبتدأ OFFLINE</button>
+<button class="diffBtn" onclick="pickDiff('mid')" style="background:#ffbe0b">🟡 وسط OFFLINE</button>
+<button class="diffBtn" onclick="pickDiff('hard')" style="background:#ff4500;color:#fff">🔴 صعب OFFLINE</button>
 <div id="missionsBox" style="width:100%;max-width:320px;margin-top:10px"></div>
-<p style="font-size:10px;color:#00ff88;margin-top:8px">✅ تشتغل بدون انترنت - v17</p>
+<p style="font-size:10px;color:#00ff88;margin-top:8px">✅ v18 - منع السحب للبيتزا</p>
 </div>
 <div id="diffOv"><h2 id="diffTitle" style="color:#ff8906">جاهز؟</h2><p id="diffDesc"></p><button onclick="start()" style="margin-top:14px;padding:14px 30px;font-size:18px">ابدأ ▶️</button><button onclick="closeDiff()" style="background:#333;color:#fff;margin-top:8px">رجوع</button></div>
 <div id="shop">
@@ -91,7 +94,7 @@ button{background:#ff8906;color:#000;border:none;padding:10px 16px;border-radius
 </div>
 <button onclick="closeShop()" style="margin-top:10px;background:#333;color:#fff">رجوع</button>
 </div>
-<div id="adOv"><h2 style="color:#00ff88">📺 إعلان</h2><div style="background:#fff;color:#000;width:100%;max-width:320px;height:200px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:14px 0;font-weight:900">RBooSH v17 🫓</div><p>انتظر <b id="adTimer" style="color:#ffbe0b;font-size:22px">5</b> ث...</p><button id="adClaim" onclick="claimAd()" style="display:none;background:#00ff88;margin-top:12px">خذ 10 🪙</button><button onclick="closeAd()" style="margin-top:10px;background:#333;color:#fff">تخطي ❌</button></div>
+<div id="adOv"><h2 style="color:#00ff88">📺 إعلان</h2><div style="background:#fff;color:#000;width:100%;max-width:320px;height:200px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:14px 0;font-weight:900">RBooSH v18 🫓</div><p>انتظر <b id="adTimer" style="color:#ffbe0b;font-size:22px">5</b> ث...</p><button id="adClaim" onclick="claimAd()" style="display:none;background:#00ff88;margin-top:12px">خذ 10 🪙</button><button onclick="closeAd()" style="margin-top:10px;background:#333;color:#fff">تخطي ❌</button></div>
 </div>
 
 <button id="updateBtn" onclick="forceUpdate()">🆕 تحديث جديد <span id="newVerTxt"></span> 🔄</button>
@@ -103,11 +106,29 @@ button{background:#ff8906;color:#000;border:none;padding:10px 16px;border-radius
 <button onclick="navigator.clipboard.writeText('https://rboosh.github.io/rboosh-game/');alert('تم النسخ 📋')" style="padding:7px 14px;font-size:11px;background:#333;color:#fff">📋 نسخ الرابط</button>
 <button onclick="shareGame()" style="padding:7px 14px;font-size:11px;background:#00d4ff;color:#000">📤 مشاركة</button>
 </div>
-<div style="margin-top:6px;color:#555;font-size:10px">RBooSH v17 © 2026 - OFFLINE مصلح ✈️ | صنع بحب ❤️</div>
+<div style="margin-top:6px;color:#555;font-size:10px">RBooSH v18 © 2026 - منع البيتزا 🍕✅</div>
+</div>
 </div>
 
 <script>
-const VERSION='v17';
+// ===== منع السحب للتحديث - يصلح مشكلة البيتزا نهائياً =====
+let startY = 0;
+document.addEventListener('touchstart', e => {
+  if(e.touches.length===1) startY = e.touches[0].clientY;
+}, {passive:true});
+document.addEventListener('touchmove', e => {
+  if(e.touches.length!==1) return;
+  const curY = e.touches[0].clientY;
+  const diff = curY - startY;
+  const wrapper = document.getElementById('gameWrapper');
+  // اذا انت فوق خالص وعم تسحب لتحت - امنع تحديث المتصفح
+  if(wrapper.scrollTop <= 0 && diff > 10){
+    e.preventDefault();
+  }
+}, {passive:false});
+
+// ===== نظام التحديث الذكي =====
+const VERSION='v18';
 window.updateAvailable=false;
 let LATEST_VER = VERSION;
 
@@ -126,7 +147,6 @@ async function checkForUpdate(){
     }
   }catch(e){ hideUpdateButtons(); }
 }
-
 function showUpdateButtons(newVer){
   const btn = document.getElementById('updateBtn');
   document.getElementById('newVerTxt').textContent = newVer;
@@ -134,13 +154,11 @@ function showUpdateButtons(newVer){
   const overBtn = document.getElementById('updateBtnOver');
   if(overBtn) overBtn.style.display='block';
 }
-
 function hideUpdateButtons(){
   document.getElementById('updateBtn').style.display='none';
   const overBtn = document.getElementById('updateBtnOver');
   if(overBtn) overBtn.style.display='none';
 }
-
 async function forceUpdate(){
  if(!navigator.onLine){
    alert('انت OFFLINE ✈️ - شغل النت لتحدث');
@@ -154,7 +172,6 @@ async function forceUpdate(){
  }catch(e){}
  location.replace('./index.html?v='+Date.now()+'&ver='+LATEST_VER+'&force=1');
 }
-
 function updateOnlineStatus(){
   const badge=document.getElementById('offlineBadge');
   if(!navigator.onLine){ badge.style.display='inline-block'; badge.textContent='OFFLINE ✅'; badge.style.background='#00ff88'; }
@@ -170,6 +187,7 @@ window.addEventListener('online', updateOnlineStatus);
 window.addEventListener('offline', updateOnlineStatus);
 setTimeout(()=>{ if(navigator.serviceWorker && navigator.serviceWorker.controller){ localStorage.setItem('rHasOffline','1'); } checkForUpdate(); },1500);
 
+// ===== اللعبة =====
 const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
 let p,it,ob,pws,sc,coins=parseInt(localStorage.getItem('rCoins')||0),best=localStorage.getItem('rB')||0,run=false,sp=3.5,fr=0,adCooldown=false,diff='mid';
 let curSkin=localStorage.getItem('rSkin')||'🧒';
