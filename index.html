@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RBooSH - لعبة الحسكة</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Tajawal',sans-serif}
+body{background:#0f0e17;color:#fff;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+#h{width:100%;max-width:500px;display:flex;justify-content:space-between;padding:12px 20px;font-size:20px;font-weight:900}
+#score{color:#ff8906} #best{color:#e53170}
+canvas{background:linear-gradient(#1a1a2e 0%, #16213e 50%, #0f3460 100%);border-radius:22px;border:4px solid #ff8906;max-width:95vw;max-height:68vh}
+button{background:#ff8906;color:#000;border:none;padding:12px 28px;border-radius:50px;font-weight:900;font-size:18px;cursor:pointer}
+#ov{position:absolute;inset:0;background:rgba(0,0,0,0.88);display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:22px;text-align:center;padding:20px}
+</style>
+</head>
+<body>
+<div id="h"><div>النقاط: <span id="score">0</span></div><div>أعلى: <span id="best">0</span></div></div>
+<div style="position:relative">
+<canvas id="c" width="400" height="600"></canvas>
+<div id="ov">
+<div style="font-size:50px">🏃‍♂️🫓</div>
+<h1 style="font-size:52px;color:#ff8906">RBooSH</h1>
+<p style="font-size:20px;margin:15px 0">اجمع خبز التنور واهرب من الجور!<br>كبسة = نطّة</p>
+<button onclick="start()">يلا نلعب - دحّق!</button>
+</div>
+</div>
+<button onclick="jump()" style="margin-top:12px">نطّة ⬆️</button>
+
+<script>
+const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+let p,it,ob,sc,best=localStorage.getItem('rB')||0,run=false,sp=3,fr=0;
+document.getElementById('best').textContent=best;
+class Pl{constructor(){this.x=60;this.y=450;this.w=40;this.h=50;this.vy=0;this.g=true} upd(){this.vy+=0.85;this.y+=this.vy;if(this.y>450){this.y=450;this.vy=0;this.g=true}} draw(){ctx.font='38px serif';ctx.fillText('🧒',this.x-4,this.y+38)} jump(){if(this.g){this.vy=-17;this.g=false}}}
+function start(){p=new Pl();it=[];ob=[];sc=0;sp=3;fr=0;run=true;document.getElementById('ov').style.display='none';document.getElementById('score').textContent=0;loop()}
+function jump(){if(run)p.jump()}
+canvas.addEventListener('touchstart',e=>{e.preventDefault();jump()});canvas.addEventListener('mousedown',jump);
+document.addEventListener('keydown',e=>{if(e.code==='Space')jump()});
+function loop(){if(!run)return;fr++;ctx.clearRect(0,0,400,600);
+if(fr%75==0)it.push({x:400,y:Math.random()*280+160,w:30,h:30,done:false});
+if(fr%95==0)ob.push({x:400,y:470,w:34,h:30});
+for(let i of it){i.x-=sp;ctx.font='28px serif';ctx.fillText('🫓',i.x,i.y);if(!i.done&&i.x<p.x+p.w&&i.x+i.w>p.x&&i.y<p.y+p.h&&i.y+i.h>p.y){i.done=true;sc++;document.getElementById('score').textContent=sc;if(sc%10==0)sp+=0.6}} it=it.filter(x=>!x.done&&x.x>-50);
+for(let o of ob){o.x-=sp;ctx.font='30px serif';ctx.fillText('🕳️',o.x,o.y+25);if(o.x<p.x+p.w-8&&o.x+o.w>p.x+8&&o.y<p.y+p.h&&o.y+o.h>p.y){return over()}} ob=ob.filter(x=>x.x>-50);
+p.upd();p.draw();ctx.fillStyle='#ff8906';ctx.fillRect(0,500,400,6);requestAnimationFrame(loop)}
+function over(){run=false;if(sc>best){best=sc;localStorage.setItem('rB',best);document.getElementById('best').textContent=best}const ov=document.getElementById('ov');ov.style.display='flex';ov.innerHTML=`<div style="font-size:50px">${sc>10?'🔥':'💀'}</div><h1 style="font-size:48px;color:#ff8906">${sc>10?'وحش!':'أووبس!'}</h1><p style="font-size:22px">جمعت ${sc} خبزة</p><p>${sc>=best?'رقم قياسي جديد بالحسكة!':'أعلى رقم: '+best}</p><button onclick="start()" style="margin-top:15px">مرة تانية 🚀</button>`}
+</script>
+</body>
+</html>
