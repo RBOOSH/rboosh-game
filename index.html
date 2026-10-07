@@ -2,153 +2,87 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>RBooSH - لعبة الحسكة</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>RBooSH - متجر الحسكة</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ff8906">
-<meta name="apple-mobile-web-app-capable" content="yes">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@900&display=swap');
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Tajawal',sans-serif;-webkit-tap-highlight-color:transparent}
-body{background:#0f0e17;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
-#h{width:100%;max-width:500px;display:flex;justify-content:space-between;align-items:center;padding:12px 20px;font-size:17px;font-weight:900;background:#1a1a2e;border-radius:14px;margin-bottom:8px}
-canvas{background:linear-gradient(180deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);border-radius:22px;border:4px solid #ff8906;max-width:95vw;max-height:62vh;display:block}
-button{background:#ff8906;color:#000;border:none;padding:10px 22px;border-radius:50px;font-weight:900;font-size:16px;cursor:pointer;transition:0.2s}
-button:active{transform:scale(0.95)}
-#ov,#shop{position:absolute;inset:0;background:rgba(15,14,23,0.96);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;border-radius:22px;text-align:center;padding:20px;overflow-y:auto}
-#shop{display:none;padding-top:18px}
-.skin{display:flex;justify-content:space-between;align-items:center;background:#1a1a2e;border:2px solid #333;border-radius:14px;padding:10px 14px;margin:6px 0;width:100%;max-width:380px}
-.skin.owned{border-color:#ff8906}.skin.selected{border-color:#00ff88;background:#14281e}
-.badge{background:#ffbe0b;color:#000;padding:2px 8px;border-radius:20px;font-size:11px;margin-right:6px}
-.payBox{background:#1e1e2e;border:2px dashed #ff8906;border-radius:14px;padding:14px;margin-top:14px;width:100%;max-width:380px;text-align:right;line-height:1.6}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Tajawal',sans-serif}
+body{background:#0f0e17;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#h{width:100%;max-width:500px;display:flex;justify-content:space-between;padding:12px 16px;font-size:16px;font-weight:900;background:#1a1a2e;border-radius:12px;margin-bottom:8px}
+canvas{background:linear-gradient(#1a1a2e,#0f3460);border-radius:22px;border:4px solid #ff8906;max-width:95vw;max-height:60vh}
+button{background:#ff8906;color:#000;border:none;padding:10px 20px;border-radius:50px;font-weight:900;font-size:15px;cursor:pointer;margin:4px}
+#ov,#shop{position:absolute;inset:0;background:rgba(0,0,0,0.94);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;border-radius:22px;text-align:center;padding:20px;overflow-y:auto}
+#shop{display:none}
+.skin{display:flex;justify-content:space-between;align-items:center;background:#1a1a2e;border:2px solid #333;border-radius:14px;padding:10px 12px;margin:6px 0;width:100%;max-width:380px}
+.skin.owned{border-color:#ff8906}.skin.selected{border-color:#00ff88;background:#12281e}
+.badge{background:#ffbe0b;color:#000;padding:2px 8px;border-radius:20px;font-size:11px}
+.pay{background:#1e1e2e;border:2px dashed #ff8906;border-radius:14px;padding:14px;margin-top:14px;width:100%;max-width:380px;text-align:right}
 </style>
 </head>
 <body>
-
-<div id="h">
-<div>🫓 <span id="score">0</span></div>
-<div>💰 <span id="coins">0</span> | 👑 <span id="best">0</span></div>
-<div><button onclick="openShop()" style="padding:7px 14px;font-size:14px">🛒 متجر</button></div>
-</div>
-
-<div style="position:relative" id="gameBox">
+<div id="h"><div>🫓 <span id="score">0</span></div><div>💰 <span id="coins">0</span> | أعلى: <span id="best">0</span></div><div><button onclick="openShop()" style="padding:6px 12px">🛒 متجر</button></div></div>
+<div style="position:relative">
 <canvas id="c" width="400" height="620"></canvas>
-
 <div id="ov">
-<div style="font-size:56px">🏃‍♂️🫓</div>
-<h1 style="font-size:48px;color:#ff8906;margin:4px 0">RBooSH</h1>
-<p style="color:#ccc">دبل نطة للخبز العالي!</p>
-<p style="font-size:12px;color:#ffbe0b;margin:6px 0">نطة وحدة = خبز واطي | دبل نطة = خبز عالي = نقطتين</p>
-<div style="display:flex;gap:8px;margin-top:14px">
-<button onclick="start()">يلا نلعب 🎮</button>
-<button onclick="openShop()" style="background:#00ff88">المتجر 🛒</button>
+<div style="font-size:60px">🏃‍♂️🫓</div>
+<h1 style="font-size:46px;color:#ff8906">RBooSH</h1>
+<p>دبل نطة للخبز العالي!</p>
+<button onclick="start()" style="margin-top:12px">يلا دحّق!</button>
 </div>
-<p style="font-size:11px;color:#666;margin-top:12px">من الحسكة - للعالم 🌍</p>
-</div>
-
 <div id="shop">
-<h2 style="color:#ff8906;font-size:28px">🛒 متجر ربوش</h2>
-<p style="font-size:14px;margin:4px 0">رصيدك: <b id="shopCoins" style="color:#ffbe0b">0</b> عملة 🪙</p>
+<h2 style="color:#ff8906">🛒 متجر الحسكة</h2>
+<p>رصيدك: <b id="shopCoins" style="color:#ffbe0b">0</b> 🪙</p>
 <div id="skinsList" style="width:100%;display:flex;flex-direction:column;align-items:center;margin-top:10px"></div>
-
-<div class="payBox">
-<p style="font-weight:900;color:#ff8906;font-size:16px;text-align:center">💸 كيف تشتري؟ - شام كاش / سيريتل كاش</p>
-<div style="font-size:13px;margin-top:10px">
-<b>🔶 شام كاش:</b><br>
-رقم المحفظة: <b style="color:#ffbe0b;font-size:15px">0933XXXXXX</b> - غيّر رقمك هون<br><br>
-
-<b>🔷 سيريتل كاش:</b><br>
-رقم المحفظة: <b style="color:#00d4ff;font-size:15px">0933XXXXXX</b> - غيّر رقمك هون<br><br>
-
-<b>💰 الأسعار:</b><br>
-👑 ملك الحسكة = <b>5,000 ل.س</b><br>
-🔥 ربوش النار = <b>10,000 ل.س</b><br>
-💎 ربوش الماسي = <b>25,000 ل.س</b><br><br>
-
-بعد التحويل ابعت صورة التحويل على واتساب:<br>
-<b style="color:#00ff88;font-size:15px">📱 09XXXXXXXX</b> - غيّر رقمك هون<br>
-أبعتلك كود الفك فوراً! ⚡
-</div>
-
-<div style="display:flex;gap:6px;margin-top:14px">
-<input id="codeInp" placeholder="دخل كود الفك هون" style="flex:1;padding:12px;border-radius:25px;border:none;text-align:center;font-size:14px">
+<div class="pay">
+<p style="color:#ff8906;font-weight:900;text-align:center">💸 الدفع: شام كاش / سيريتل كاش</p>
+<p style="font-size:13px;margin-top:8px;line-height:1.8">
+شام كاش: <b style="color:#ffbe0b">09XXXXXXXXX</b><br>
+سيريتل كاش: <b style="color:#00d4ff">09XXXXXXXXX</b><br><br>
+👑 ملك الحسكة = 5,000 ل.س<br>
+🔥 ربوش النار = 10,000 ل.س<br>
+💎 الماسي = 25,000 ل.س<br><br>
+بعد التحويل واتساب: <b style="color:#00ff88">09XXXXXXXXX</b>
+</p>
+<div style="display:flex;gap:6px;margin-top:10px">
+<input id="codeInp" placeholder="دخل كود الفك" style="flex:1;padding:10px;border-radius:20px;border:none;text-align:center">
 <button onclick="redeem()" style="background:#00ff88">فك 🔓</button>
 </div>
-<p style="font-size:11px;color:#888;margin-top:6px;text-align:center">كود تجريبي مجاني: RBOOSH-GOLD</p>
+<p style="font-size:11px;color:#888;margin-top:6px">كود تجريبي: RBOOSH-GOLD</p>
 </div>
-
-<button onclick="closeShop()" style="margin-top:14px;background:#333;color:#fff">⬅️ رجوع للعبة</button>
+<button onclick="closeShop()" style="margin-top:12px;background:#333;color:#fff">رجوع</button>
 </div>
 </div>
-
-<button onclick="jump()" style="margin-top:12px;width:90%;max-width:500px;padding:14px;font-size:18px">نطّة ⬆️ (دبل نطة بالهوا)</button>
-<p style="font-size:11px;color:#555;margin-top:6px">المس الشاشة أو كبس Space</p>
-
+<button onclick="jump()" style="margin-top:10px;width:95vw;max-width:500px;padding:12px">نطّة ⬆️</button>
 <script>
 const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
 let p,it,ob,sc,coins=parseInt(localStorage.getItem('rCoins')||0),best=localStorage.getItem('rB')||0,run=false,sp=3.5,fr=0;
 let curSkin=localStorage.getItem('rSkin')||'🧒';
 let owned=JSON.parse(localStorage.getItem('rOwned')||'["🧒"]');
 const SKINS=[
- {id:'🧒',name:'ربوش العادي',price:0,desc:'مجاني - بداية المشوار'},
- {id:'👨‍🍳',name:'خباز التنور',price:30,desc:'+10% عملات أكثر'},
- {id:'🦸‍♂️',name:'سوبر ربوش',price:70,desc:'نطة أعلى + شكل رهيب'},
- {id:'👑',name:'ملك الحسكة',price:0,desc:'5,000 ل.س شام/سيريتل كاش',code:'RBOOSH-GOLD',realPrice:'5,000 ل.س'},
- {id:'🔥',name:'ربوش النار',price:0,desc:'10,000 ل.س شام/سيريتل كاش',code:'RBOOSH-FIRE',realPrice:'10,000 ل.س'},
- {id:'💎',name:'ربوش الماسي النادر',price:0,desc:'25,000 ل.س - أقوى سكين',code:'RBOOSH-DIAMOND',realPrice:'25,000 ل.س'}
+ {id:'🧒',name:'ربوش العادي',price:0,desc:'مجاني'},
+ {id:'👨‍🍳',name:'خباز التنور',price:30,desc:'+10% عملات'},
+ {id:'🦸‍♂️',name:'سوبر ربوش',price:70,desc:'نطة أعلى'},
+ {id:'👑',name:'ملك الحسكة',price:0,desc:'5,000 ل.س',code:'RBOOSH-GOLD',realPrice:'5,000'},
+ {id:'🔥',name:'ربوش النار',price:0,desc:'10,000 ل.س',code:'RBOOSH-FIRE',realPrice:'10,000'},
+ {id:'💎',name:'الماسي النادر',price:0,desc:'25,000 ل.س',code:'RBOOSH-DIAMOND',realPrice:'25,000'}
 ];
 document.getElementById('best').textContent=best;document.getElementById('coins').textContent=coins;
-class Pl{
- constructor(){this.x=60;this.y=470;this.w=38;this.h=50;this.vy=0;this.jumps=0;this.maxJumps=2;this.isGold=curSkin=='👑'||curSkin=='💎'}
- upd(){this.vy+=0.95;this.y+=this.vy;if(this.y>=470){this.y=470;this.vy=0;this.jumps=0}}
- draw(){
-  ctx.fillStyle='rgba(0,0,0,0.35)';ctx.beginPath();ctx.ellipse(this.x+19,525,18,6,0,0,Math.PI*2);ctx.fill();
-  ctx.font=(this.isGold?'46px':'40px')+' serif';ctx.fillText(curSkin,this.x-4,this.y+38);
-  if(this.isGold){ctx.font='18px serif';ctx.fillText('✨',this.x+32,this.y+5)}
- }
- jump(){if(this.jumps<this.maxJumps){let jP=this.isGold||curSkin=='🦸‍♂️'||curSkin=='💎'?-19:-16.8;this.vy=jP;this.jumps++;}}
-}
+class Pl{constructor(){this.x=60;this.y=470;this.w=38;this.h=50;this.vy=0;this.jumps=0;this.maxJumps=2}upd(){this.vy+=0.95;this.y+=this.vy;if(this.y>=470){this.y=470;this.vy=0;this.jumps=0}}draw(){ctx.font='40px serif';ctx.fillText(curSkin,this.x-4,this.y+38)}jump(){if(this.jumps<this.maxJumps){this.vy=(curSkin=='🦸‍♂️'||curSkin=='💎'?-19:-17);this.jumps++;}}}
 function start(){p=new Pl();it=[];ob=[];sc=0;sp=3.5;fr=0;run=true;document.getElementById('ov').style.display='none';document.getElementById('score').textContent=0;loop()}
 function jump(){if(run)p.jump()}
-canvas.addEventListener('touchstart',e=>{e.preventDefault();jump()},{passive:false});
-canvas.addEventListener('mousedown',jump);
-document.addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();jump()}});
-function loop(){
- if(!run)return;fr++;ctx.clearRect(0,0,400,620);
- if(fr%64==0){const high=Math.random()>0.48;it.push({x:400,y:high?Math.random()*130+70:Math.random()*160+300,w:30,h:30,done:false,high})}
- if(fr%86==0)ob.push({x:400,y:490,w:34,h:30});
- for(let i of it){
-  i.x-=sp;ctx.font=i.high?'34px serif':'30px serif';ctx.fillText('🫓',i.x,i.y);
-  if(!i.done&&i.x<p.x+p.w&&i.x+i.w>p.x&&i.y<p.y+p.h+10&&i.y+i.h>p.y){
-   i.done=true;sc+=i.high?2:1;let add=i.high?3:1;if(curSkin=='👨‍🍳')add=Math.ceil(add*1.2);coins+=add;localStorage.setItem('rCoins',coins);
-   document.getElementById('score').textContent=sc;document.getElementById('coins').textContent=coins;if(sc%10==0)sp+=0.55;
-  }
- }it=it.filter(x=>!x.done&&x.x>-50);
- for(let o of ob){o.x-=sp;ctx.font='32px serif';ctx.fillText('🕳️',o.x,o.y+25);if(o.x<p.x+p.w-10&&o.x+o.w>p.x+10&&o.y<p.y+p.h&&o.y+o.h>p.y){return over()}}ob=ob.filter(x=>x.x>-50);
- p.upd();p.draw();ctx.fillStyle='#ff8906';ctx.fillRect(0,520,400,7);requestAnimationFrame(loop)
-}
-function over(){
- run=false;if(sc>best){best=sc;localStorage.setItem('rB',best);document.getElementById('best').textContent=best}
- const ov=document.getElementById('ov');ov.style.display='flex';
- ov.innerHTML=`<h1 style="color:#ff8906;font-size:36px">${sc>=15?'أسطورة الحسكة! 🔥':'حاول مرة تانية!'}</h1><p style="margin:8px 0">جبت ${sc} خبزة + ${coins} عملة 🪙</p><p style="font-size:12px;color:#aaa">فتّح سكين جديد من المتجر!</p><div style="display:flex;gap:10px;margin-top:14px"><button onclick="start()">مرة تانية 🔄</button><button onclick="openShop()" style="background:#00ff88">المتجر 🛒</button></div>`
-}
+canvas.addEventListener('touchstart',e=>{e.preventDefault();jump()});canvas.addEventListener('mousedown',jump);document.addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();jump()}});
+function loop(){if(!run)return;fr++;ctx.clearRect(0,0,400,620);if(fr%64==0){const h=Math.random()>0.5;it.push({x:400,y:h?100:320,w:30,h:30,done:false,h})}if(fr%86==0)ob.push({x:400,y:490,w:34,h:30});for(let i of it){i.x-=sp;ctx.font='30px serif';ctx.fillText('🫓',i.x,i.y);if(!i.done&&i.x<p.x+p.w&&i.x+i.w>p.x&&i.y<p.y+p.h+10&&i.y+i.h>p.y){i.done=true;sc+=i.h?2:1;coins+=i.h?3:1;localStorage.setItem('rCoins',coins);document.getElementById('score').textContent=sc;document.getElementById('coins').textContent=coins;if(sc%10==0)sp+=0.5}}it=it.filter(x=>!x.done&&x.x>-50);for(let o of ob){o.x-=sp;ctx.font='32px serif';ctx.fillText('🕳️',o.x,o.y+25);if(o.x<p.x+p.w-10&&o.x+o.w>p.x+10&&o.y<p.y+p.h&&o.y+o.h>p.y){return over()}}ob=ob.filter(x=>x.x>-50);p.upd();p.draw();ctx.fillStyle='#ff8906';ctx.fillRect(0,520,400,7);requestAnimationFrame(loop)}
+function over(){run=false;if(sc>best){best=sc;localStorage.setItem('rB',best);document.getElementById('best').textContent=best}const ov=document.getElementById('ov');ov.style.display='flex';ov.innerHTML=`<h1 style="color:#ff8906">جبت ${sc} خبزة!</h1><p>معك ${coins} عملة</p><div style="display:flex;gap:8px;margin-top:10px"><button onclick="start()">مرة تانية</button><button onclick="openShop()" style="background:#00ff88">متجر 🛒</button></div>`}
 function openShop(){document.getElementById('shop').style.display='flex';renderSkins()}
 function closeShop(){document.getElementById('shop').style.display='none';if(!run)document.getElementById('ov').style.display='flex'}
-function renderSkins(){
- document.getElementById('shopCoins').textContent=coins;
- const list=document.getElementById('skinsList');list.innerHTML='';
- SKINS.forEach(s=>{
-  const isOwned=owned.includes(s.id);const isCur=curSkin==s.id;
-  const div=document.createElement('div');div.className='skin '+(isOwned?'owned ':'')+(isCur?'selected':'');
-  div.innerHTML=`<div style="display:flex;align-items:center;gap:12px"><span style="font-size:30px">${s.id}</span><div style="text-align:right"><div style="font-size:14px">${s.name} ${s.realPrice?`<span class="badge">${s.realPrice}</span>`:''}</div><div style="font-size:11px;color:#aaa">${s.desc}</div></div></div><div>${isCur?'✅':isOwned?`<button onclick="selectSkin('${s.id}')" style="padding:6px 14px;font-size:13px">استخدم</button>`:s.code?`<button onclick="buyReal('${s.id}')" style="padding:6px 14px;font-size:13px;background:#00ff88">شراء</button>`:`<button onclick="buySkin('${s.id}',${s.price})" style="padding:6px 14px;font-size:13px">${s.price} 🪙</button>`}</div>`;
-  list.appendChild(div)
- })
-}
-function buySkin(id,price){if(coins>=price){coins-=price;owned.push(id);localStorage.setItem('rCoins',coins);localStorage.setItem('rOwned',JSON.stringify(owned));document.getElementById('coins').textContent=coins;selectSkin(id)}else alert('ما عندك عملات كفاية! العب أكتر 🫓')}
-function buyReal(id){const s=SKINS.find(x=>x.id==id);alert('لشراء '+s.name+' بـ '+s.realPrice+'\n\n1- حول على شام كاش / سيريتل كاش\n2- ابعت صورة التحويل واتساب\n3- ببعتلك كود الفك فوراً\n\nكود تجريبي: '+s.code)}
+function renderSkins(){document.getElementById('shopCoins').textContent=coins;const l=document.getElementById('skinsList');l.innerHTML='';SKINS.forEach(s=>{const o=owned.includes(s.id),c=curSkin==s.id;const d=document.createElement('div');d.className='skin '+(o?'owned ':'')+(c?'selected':'');d.innerHTML=`<div style="display:flex;align-items:center;gap:10px"><span style="font-size:28px">${s.id}</span><div style="text-align:right"><div style="font-size:13px">${s.name} ${s.realPrice?`<span class="badge">${s.realPrice}</span>`:''}</div><div style="font-size:11px;color:#aaa">${s.desc}</div></div></div><div>${c?'✅':o?`<button onclick="selectSkin('${s.id}')">استخدم</button>`:s.code?`<button onclick="buyReal('${s.id}')" style="background:#00ff88">شراء</button>`:`<button onclick="buySkin('${s.id}',${s.price})">${s.price} 🪙</button>`}</div>`;l.appendChild(d)})}
+function buySkin(id,pr){if(coins>=pr){coins-=pr;owned.push(id);localStorage.setItem('rCoins',coins);localStorage.setItem('rOwned',JSON.stringify(owned));document.getElementById('coins').textContent=coins;selectSkin(id)}else alert('ما عندك عملات كفاية!')}
+function buyReal(id){const s=SKINS.find(x=>x.id==id);alert('للشراء: حول '+s.realPrice+' ل.س على شام كاش / سيريتل كاش وابعت صورة التحويل واتساب. كود تجريبي: '+s.code)}
 function selectSkin(id){curSkin=id;localStorage.setItem('rSkin',id);renderSkins()}
-function redeem(){const code=document.getElementById('codeInp').value.trim().toUpperCase();const s=SKINS.find(x=>x.code==code);if(s){if(!owned.includes(s.id)){owned.push(s.id);localStorage.setItem('rOwned',JSON.stringify(owned));}selectSkin(s.id);alert('مبروك! فكيت السكين: '+s.name+' 🎉👑');document.getElementById('codeInp').value=''}else alert('كود غلط! تأكد من الكود أو تواصل واتساب')}
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}
+function redeem(){const code=document.getElementById('codeInp').value.trim().toUpperCase();const s=SKINS.find(x=>x.code==code);if(s){if(!owned.includes(s.id)){owned.push(s.id);localStorage.setItem('rOwned',JSON.stringify(owned));}selectSkin(s.id);alert('مبروك فكيت: '+s.name);document.getElementById('codeInp').value=''}else alert('كود غلط')}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js?v=5')}
 </script>
 </body>
 </html>
