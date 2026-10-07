@@ -1,7 +1,7 @@
 {
-  "name": "RBooSH v19.1 PROFIT",
+  "name": "RBooSH v19.2",
   "short_name": "RBooSH",
-  "start_url": "./index.html?v=19.1",
+  "start_url": "./index.html?v=19.2",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0f0e17",
