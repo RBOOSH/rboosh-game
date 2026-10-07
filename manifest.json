@@ -1,7 +1,7 @@
 {
-  "name": "RBooSH",
+  "name": "RBooSH v13",
   "short_name": "RBooSH",
-  "start_url": "./index.html?v=11",
+  "start_url": "./index.html?v=13",
   "display": "standalone",
   "background_color": "#0f0e17",
   "theme_color": "#ff8906",
