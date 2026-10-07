@@ -1,7 +1,7 @@
 {
-  "name": "RBooSH - نقاط وإعلانات",
+  "name": "RBooSH",
   "short_name": "RBooSH",
-  "start_url": "./index.html?v=7",
+  "start_url": "./index.html?v=11",
   "display": "standalone",
   "background_color": "#0f0e17",
   "theme_color": "#ff8906",
