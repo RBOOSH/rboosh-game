@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>RBooSH v16</title>
+<title>RBooSH v17 OFFLINE</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ff8906">
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js?v=16').then(reg => {
+    navigator.serviceWorker.register('sw.js?v=17').then(reg => {
       reg.addEventListener('updatefound', () => {
         const nw = reg.installing;
         nw.addEventListener('statechange', () => {
           if(nw.state === 'installed' && navigator.serviceWorker.controller){
             window.updateAvailable = true;
-            showUpdateButtons('v16');
+            showUpdateButtons('v17');
           }
         });
       });
@@ -46,8 +46,7 @@ button{background:#ff8906;color:#000;border:none;padding:10px 16px;border-radius
 #footerLink a{color:#ff8906;text-decoration:none;word-break:break-all;font-size:12px}
 @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
 .offlineBadge{background:#00ff88;color:#000;padding:3px 8px;border-radius:20px;font-size:10px;display:none}
-#updateBtn{display:none;animation:pulse 1s infinite}
-.updateBtnOver{display:none}
+#updateBtn{display:none;animation:pulse 1s infinite;width:95vw;max-width:420px;padding:14px;margin-top:6px;background:#00ff88;color:#000;border:2px solid #00ff88;border-radius:14px;font-weight:900}
 </style>
 </head>
 <body>
@@ -66,7 +65,7 @@ button{background:#ff8906;color:#000;border:none;padding:10px 16px;border-radius
 <div id="ov">
 <div style="font-size:56px">🏃‍♂️🫓</div>
 <h1 style="font-size:40px;color:#ff8906">RBooSH</h1>
-<p style="font-size:13px;margin:6px 0">أعلى سكور: <b id="best">0</b> | معك <b id="ovCoins">0</b> 🪙 | المس الشاشة لتنط</p>
+<p style="font-size:13px;margin:6px 0">أعلى سكور: <b id="best">0</b> | معك <b id="ovCoins">0</b> 🪙</p>
 <div id="dailyBox" style="background:#1a1a2e;border:2px solid #ffbe0b;border-radius:14px;padding:10px;width:100%;max-width:320px;margin:8px 0"></div>
 <div style="display:flex;gap:6px;margin:8px 0">
 <button onclick="openWheel()" style="background:#ffbe0b">🎁 عجلة الحظ</button>
@@ -77,7 +76,7 @@ button{background:#ff8906;color:#000;border:none;padding:10px 16px;border-radius
 <button class="diffBtn" onclick="pickDiff('mid')" style="background:#ffbe0b">🟡 وسط</button>
 <button class="diffBtn" onclick="pickDiff('hard')" style="background:#ff4500;color:#fff">🔴 صعب</button>
 <div id="missionsBox" style="width:100%;max-width:320px;margin-top:10px"></div>
-<p style="font-size:10px;color:#00ff88;margin-top:8px">✅ تشتغل بدون انترنت</p>
+<p style="font-size:10px;color:#00ff88;margin-top:8px">✅ تشتغل بدون انترنت - v17</p>
 </div>
 <div id="diffOv"><h2 id="diffTitle" style="color:#ff8906">جاهز؟</h2><p id="diffDesc"></p><button onclick="start()" style="margin-top:14px;padding:14px 30px;font-size:18px">ابدأ ▶️</button><button onclick="closeDiff()" style="background:#333;color:#fff;margin-top:8px">رجوع</button></div>
 <div id="shop">
@@ -92,10 +91,10 @@ button{background:#ff8906;color:#000;border:none;padding:10px 16px;border-radius
 </div>
 <button onclick="closeShop()" style="margin-top:10px;background:#333;color:#fff">رجوع</button>
 </div>
-<div id="adOv"><h2 style="color:#00ff88">📺 إعلان</h2><div style="background:#fff;color:#000;width:100%;max-width:320px;height:200px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:14px 0;font-weight:900">RBooSH 🫓</div><p>انتظر <b id="adTimer" style="color:#ffbe0b;font-size:22px">5</b> ث...</p><button id="adClaim" onclick="claimAd()" style="display:none;background:#00ff88;margin-top:12px">خذ 10 🪙</button><button onclick="closeAd()" style="margin-top:10px;background:#333;color:#fff">تخطي ❌</button></div>
+<div id="adOv"><h2 style="color:#00ff88">📺 إعلان</h2><div style="background:#fff;color:#000;width:100%;max-width:320px;height:200px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:14px 0;font-weight:900">RBooSH v17 🫓</div><p>انتظر <b id="adTimer" style="color:#ffbe0b;font-size:22px">5</b> ث...</p><button id="adClaim" onclick="claimAd()" style="display:none;background:#00ff88;margin-top:12px">خذ 10 🪙</button><button onclick="closeAd()" style="margin-top:10px;background:#333;color:#fff">تخطي ❌</button></div>
 </div>
 
-<button id="updateBtn" onclick="forceUpdate()">🆕 تحديث جديد <span id="newVerTxt"></span> 🔄 <span style="font-size:10px;color:#000" id="verTxt"></span></button>
+<button id="updateBtn" onclick="forceUpdate()">🆕 تحديث جديد <span id="newVerTxt"></span> 🔄</button>
 
 <div id="footerLink">
 🔗 رابط اللعبة<br>
@@ -104,21 +103,19 @@ button{background:#ff8906;color:#000;border:none;padding:10px 16px;border-radius
 <button onclick="navigator.clipboard.writeText('https://rboosh.github.io/rboosh-game/');alert('تم النسخ 📋')" style="padding:7px 14px;font-size:11px;background:#333;color:#fff">📋 نسخ الرابط</button>
 <button onclick="shareGame()" style="padding:7px 14px;font-size:11px;background:#00d4ff;color:#000">📤 مشاركة</button>
 </div>
-<div style="margin-top:6px;color:#555;font-size:10px">RBooSH v16 © 2026 - OFFLINE ✈️ | صنع بحب ❤️</div>
+<div style="margin-top:6px;color:#555;font-size:10px">RBooSH v17 © 2026 - OFFLINE مصلح ✈️ | صنع بحب ❤️</div>
 </div>
 
 <script>
-const VERSION='v16';
-document.getElementById('verTxt').textContent='('+VERSION+')';
+const VERSION='v17';
 window.updateAvailable=false;
 let LATEST_VER = VERSION;
 
-// فحص التحديث من version.json
 async function checkForUpdate(){
   try{
-    if(!navigator.onLine) return;
+    if(!navigator.onLine){ hideUpdateButtons(); return; }
     const res = await fetch('./version.json?v='+Date.now(), {cache:'no-store'});
-    if(!res.ok) return;
+    if(!res.ok){ hideUpdateButtons(); return; }
     const data = await res.json();
     LATEST_VER = data.latest || VERSION;
     if(LATEST_VER!== VERSION){
@@ -134,10 +131,6 @@ function showUpdateButtons(newVer){
   const btn = document.getElementById('updateBtn');
   document.getElementById('newVerTxt').textContent = newVer;
   btn.style.display='block';
-  btn.style.background='#00ff88';
-  btn.style.color='#000';
-  btn.style.border='2px solid #00ff88';
-  // اظهر زر التحديث اللي بشاشة الخسارة اذا موجود
   const overBtn = document.getElementById('updateBtnOver');
   if(overBtn) overBtn.style.display='block';
 }
@@ -149,6 +142,10 @@ function hideUpdateButtons(){
 }
 
 async function forceUpdate(){
+ if(!navigator.onLine){
+   alert('انت OFFLINE ✈️ - شغل النت لتحدث');
+   return;
+ }
  const btn=document.getElementById('updateBtn');
  btn.textContent='⏳ جاري التحديث...'; btn.disabled=true;
  try{
@@ -158,10 +155,9 @@ async function forceUpdate(){
  location.replace('./index.html?v='+Date.now()+'&ver='+LATEST_VER+'&force=1');
 }
 
-// كشف OFFLINE
 function updateOnlineStatus(){
   const badge=document.getElementById('offlineBadge');
-  if(!navigator.onLine){ badge.style.display='inline-block'; badge.textContent='OFFLINE ✅'; }
+  if(!navigator.onLine){ badge.style.display='inline-block'; badge.textContent='OFFLINE ✅'; badge.style.background='#00ff88'; }
   else {
     checkForUpdate();
     if(localStorage.getItem('rHasOffline')==='1'){
@@ -249,7 +245,7 @@ function over(){
  const ov=document.getElementById('ov'); ov.style.display='flex';
  let updateBtnHtml = '';
  if(window.updateAvailable){
-   updateBtnHtml = `<button id="updateBtnOver" onclick="forceUpdate()" style="background:#00ff88;color:#000;width:100%;border:2px solid #00ff88;animation:pulse 1s infinite">🆕 تحديث ${LATEST_VER} 🔄</button>`;
+   updateBtnHtml = `<button id="updateBtnOver" onclick="forceUpdate()" style="background:#00ff88;color:#000;width:100%;border:2px solid #00ff88;animation:pulse 1s infinite;display:block">🆕 تحديث ${LATEST_VER} 🔄</button>`;
  }
  ov.innerHTML=`<h1 style="color:#ffbe0b">جبت ${sc} خبزة! ${!navigator.onLine?'OFFLINE':''}</h1><p>${DIFFS[diff].name} | معك ${coins} 🪙</p><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;width:100%;max-width:320px"><div style="display:flex;gap:6px"><button onclick="document.getElementById('ov').style.display='none';pickDiff('${diff}')" style="flex:1">مرة تانية</button><button onclick="openShop()" style="flex:1;background:#00ff88">متجر</button></div><button onclick="watchAd()" style="background:#ffbe0b">📺 إعلان</button><button onclick="shareGame()" style="background:#00d4ff">📤 شارك</button>${updateBtnHtml}<button onclick="location.reload()" style="background:#333;color:#fff">غير الصعوبة</button></div>`;
  renderDaily();
