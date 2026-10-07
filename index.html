@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>RBooSH - متجر الحسكة</title>
+<title>RBooSH - مخربط!</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ff8906">
 <style>
@@ -28,7 +28,7 @@ button{background:#ff8906;color:#000;border:none;padding:10px 20px;border-radius
 <div id="ov">
 <div style="font-size:60px">🏃‍♂️🫓</div>
 <h1 style="font-size:46px;color:#ff8906">RBooSH</h1>
-<p>دبل نطة للخبز العالي!</p>
+<p>خبز مخربط! واطي ونص وعالي!</p>
 <button onclick="start()" style="margin-top:12px">يلا دحّق!</button>
 </div>
 <div id="shop">
@@ -36,17 +36,17 @@ button{background:#ff8906;color:#000;border:none;padding:10px 20px;border-radius
 <p>رصيدك: <b id="shopCoins" style="color:#ffbe0b">0</b> 🪙</p>
 <div id="skinsList" style="width:100%;display:flex;flex-direction:column;align-items:center;margin-top:10px"></div>
 <div class="pay">
-<p style="color:#ff8906;font-weight:900;text-align:center">💸 الدفع: شام كاش / سيريتل كاش</p>
+<p style="color:#ff8906;font-weight:900;text-align:center">💸 شام كاش / سيريتل كاش</p>
 <p style="font-size:13px;margin-top:8px;line-height:1.8">
 شام كاش: <b style="color:#ffbe0b">09XXXXXXXXX</b><br>
 سيريتل كاش: <b style="color:#00d4ff">09XXXXXXXXX</b><br><br>
 👑 ملك الحسكة = 5,000 ل.س<br>
-🔥 ربوش النار = 10,000 ل.س<br>
-💎 الماسي = 25,000 ل.س<br><br>
-بعد التحويل واتساب: <b style="color:#00ff88">09XXXXXXXXX</b>
+🔥 النار = 10,000 ل.س<br>
+💎 الماسي = 25,000 ل.س<br>
+واتساب: <b style="color:#00ff88">09XXXXXXXXX</b>
 </p>
 <div style="display:flex;gap:6px;margin-top:10px">
-<input id="codeInp" placeholder="دخل كود الفك" style="flex:1;padding:10px;border-radius:20px;border:none;text-align:center">
+<input id="codeInp" placeholder="كود الفك" style="flex:1;padding:10px;border-radius:20px;border:none;text-align:center">
 <button onclick="redeem()" style="background:#00ff88">فك 🔓</button>
 </div>
 <p style="font-size:11px;color:#888;margin-top:6px">كود تجريبي: RBOOSH-GOLD</p>
@@ -73,16 +73,41 @@ class Pl{constructor(){this.x=60;this.y=470;this.w=38;this.h=50;this.vy=0;this.j
 function start(){p=new Pl();it=[];ob=[];sc=0;sp=3.5;fr=0;run=true;document.getElementById('ov').style.display='none';document.getElementById('score').textContent=0;loop()}
 function jump(){if(run)p.jump()}
 canvas.addEventListener('touchstart',e=>{e.preventDefault();jump()});canvas.addEventListener('mousedown',jump);document.addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();jump()}});
-function loop(){if(!run)return;fr++;ctx.clearRect(0,0,400,620);if(fr%64==0){const h=Math.random()>0.5;it.push({x:400,y:h?100:320,w:30,h:30,done:false,h})}if(fr%86==0)ob.push({x:400,y:490,w:34,h:30});for(let i of it){i.x-=sp;ctx.font='30px serif';ctx.fillText('🫓',i.x,i.y);if(!i.done&&i.x<p.x+p.w&&i.x+i.w>p.x&&i.y<p.y+p.h+10&&i.y+i.h>p.y){i.done=true;sc+=i.h?2:1;coins+=i.h?3:1;localStorage.setItem('rCoins',coins);document.getElementById('score').textContent=sc;document.getElementById('coins').textContent=coins;if(sc%10==0)sp+=0.5}}it=it.filter(x=>!x.done&&x.x>-50);for(let o of ob){o.x-=sp;ctx.font='32px serif';ctx.fillText('🕳️',o.x,o.y+25);if(o.x<p.x+p.w-10&&o.x+o.w>p.x+10&&o.y<p.y+p.h&&o.y+o.h>p.y){return over()}}ob=ob.filter(x=>x.x>-50);p.upd();p.draw();ctx.fillStyle='#ff8906';ctx.fillRect(0,520,400,7);requestAnimationFrame(loop)}
+function loop(){
+ if(!run)return;fr++;ctx.clearRect(0,0,400,620);
+ if(fr%58==0){
+  let yy, isHigh=false;
+  const rr=Math.random();
+  if(rr < 0.33){ yy=Math.random()*90+60; isHigh=true; } // عالي جدا - بدو دبل نطة
+  else if(rr < 0.66){ yy=Math.random()*110+190; isHigh=false; } // نص
+  else { yy=Math.random()*100+340; isHigh=false; } // واطي
+  it.push({x:400,y:yy,w:30,h:30,done:false,high:isHigh})
+ }
+ if(fr%86==0)ob.push({x:400,y:490,w:34,h:30});
+ for(let i of it){
+  i.x-=sp;
+  ctx.font=i.high?'34px serif':'30px serif';
+  ctx.fillText('🫓',i.x,i.y);
+  if(!i.done&&i.x<p.x+p.w&&i.x+i.w>p.x&&i.y<p.y+p.h+10&&i.y+i.h>p.y){
+   i.done=true;sc+=i.high?2:1;coins+=i.high?3:1;
+   localStorage.setItem('rCoins',coins);
+   document.getElementById('score').textContent=sc;
+   document.getElementById('coins').textContent=coins;
+   if(sc%10==0)sp+=0.5;
+  }
+ }it=it.filter(x=>!x.done&&x.x>-50);
+ for(let o of ob){o.x-=sp;ctx.font='32px serif';ctx.fillText('🕳️',o.x,o.y+25);if(o.x<p.x+p.w-10&&o.x+o.w>p.x+10&&o.y<p.y+p.h&&o.y+o.h>p.y){return over()}}ob=ob.filter(x=>x.x>-50);
+ p.upd();p.draw();ctx.fillStyle='#ff8906';ctx.fillRect(0,520,400,7);requestAnimationFrame(loop)
+}
 function over(){run=false;if(sc>best){best=sc;localStorage.setItem('rB',best);document.getElementById('best').textContent=best}const ov=document.getElementById('ov');ov.style.display='flex';ov.innerHTML=`<h1 style="color:#ff8906">جبت ${sc} خبزة!</h1><p>معك ${coins} عملة</p><div style="display:flex;gap:8px;margin-top:10px"><button onclick="start()">مرة تانية</button><button onclick="openShop()" style="background:#00ff88">متجر 🛒</button></div>`}
 function openShop(){document.getElementById('shop').style.display='flex';renderSkins()}
 function closeShop(){document.getElementById('shop').style.display='none';if(!run)document.getElementById('ov').style.display='flex'}
 function renderSkins(){document.getElementById('shopCoins').textContent=coins;const l=document.getElementById('skinsList');l.innerHTML='';SKINS.forEach(s=>{const o=owned.includes(s.id),c=curSkin==s.id;const d=document.createElement('div');d.className='skin '+(o?'owned ':'')+(c?'selected':'');d.innerHTML=`<div style="display:flex;align-items:center;gap:10px"><span style="font-size:28px">${s.id}</span><div style="text-align:right"><div style="font-size:13px">${s.name} ${s.realPrice?`<span class="badge">${s.realPrice}</span>`:''}</div><div style="font-size:11px;color:#aaa">${s.desc}</div></div></div><div>${c?'✅':o?`<button onclick="selectSkin('${s.id}')">استخدم</button>`:s.code?`<button onclick="buyReal('${s.id}')" style="background:#00ff88">شراء</button>`:`<button onclick="buySkin('${s.id}',${s.price})">${s.price} 🪙</button>`}</div>`;l.appendChild(d)})}
 function buySkin(id,pr){if(coins>=pr){coins-=pr;owned.push(id);localStorage.setItem('rCoins',coins);localStorage.setItem('rOwned',JSON.stringify(owned));document.getElementById('coins').textContent=coins;selectSkin(id)}else alert('ما عندك عملات كفاية!')}
-function buyReal(id){const s=SKINS.find(x=>x.id==id);alert('للشراء: حول '+s.realPrice+' ل.س على شام كاش / سيريتل كاش وابعت صورة التحويل واتساب. كود تجريبي: '+s.code)}
+function buyReal(id){const s=SKINS.find(x=>x.id==id);alert('للشراء: حول '+s.realPrice+' ل.س وابعت صورة التحويل واتساب. كود تجريبي: '+s.code)}
 function selectSkin(id){curSkin=id;localStorage.setItem('rSkin',id);renderSkins()}
 function redeem(){const code=document.getElementById('codeInp').value.trim().toUpperCase();const s=SKINS.find(x=>x.code==code);if(s){if(!owned.includes(s.id)){owned.push(s.id);localStorage.setItem('rOwned',JSON.stringify(owned));}selectSkin(s.id);alert('مبروك فكيت: '+s.name);document.getElementById('codeInp').value=''}else alert('كود غلط')}
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js?v=5')}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js?v=6')}
 </script>
 </body>
 </html>
