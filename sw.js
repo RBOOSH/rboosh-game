@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rboosh-v19-1-profit';
+const CACHE_NAME = 'rboosh-v19-2-fix';
 const CORE = ['./','./index.html','./manifest.json','./version.json'];
 
 self.addEventListener('install', e=>{
@@ -13,33 +13,30 @@ self.addEventListener('activate', e=>{
 });
 
 self.addEventListener('fetch', e=>{
-  const req = e.request;
-  if(req.method!=='GET') return;
-  const url = new URL(req.url);
-
+  if(e.request.method!=='GET') return;
+  const url=new URL(e.request.url);
   if(url.pathname.includes('version.json')){
     e.respondWith(
       caches.match('./version.json').then(cached=>{
-        const fetched = fetch(req,{cache:'no-store'}).then(r=>{
+        const fetched=fetch(e.request,{cache:'no-store'}).then(r=>{
           if(r.ok){ const cl=r.clone(); caches.open(CACHE_NAME).then(c=>c.put('./version.json',cl)); }
           return r;
         }).catch(()=>cached);
-        return cached || fetched;
+        return cached||fetched;
       })
     );
     return;
   }
-
-  if(req.mode==='navigate' || req.destination==='document' || url.pathname.endsWith('/') || url.pathname.includes('index.html')){
+  if(e.request.mode==='navigate' || url.pathname.endsWith('/') || url.pathname.includes('index.html')){
     e.respondWith(
       caches.match('./index.html').then(cached=>{
         if(cached){
-          fetch(req).then(r=>{
-            if(r.ok){ caches.open(CACHE_NAME).then(c=>c.put('./index.html', r.clone())); }
+          fetch(e.request).then(r=>{
+            if(r.ok) caches.open(CACHE_NAME).then(c=>c.put('./index.html', r.clone()));
           }).catch(()=>{});
           return cached;
         }
-        return fetch(req).then(r=>{
+        return fetch(e.request).then(r=>{
           if(r.ok) caches.open(CACHE_NAME).then(c=>c.put('./index.html', r.clone()));
           return r;
         }).catch(()=>caches.match('./'));
@@ -47,13 +44,11 @@ self.addEventListener('fetch', e=>{
     );
     return;
   }
-
   e.respondWith(
-    caches.match(req).then(cached=> cached || fetch(req).then(r=>{
-      if(r.ok) caches.open(CACHE_NAME).then(c=>c.put(req, r.clone()));
+    caches.match(e.request).then(cached=> cached || fetch(e.request).then(r=>{
+      if(r.ok) caches.open(CACHE_NAME).then(c=>c.put(e.request, r.clone()));
       return r;
     }).catch(()=>cached))
   );
 });
-
 self.addEventListener('message', e=>{ if(e.data && e.data.action==='skipWaiting') self.skipWaiting(); });
