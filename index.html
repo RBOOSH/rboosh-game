@@ -4,14 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#ff8906">
-<title>RBooSH v19 OFFLINE FINAL</title>
+<title>RBooSH v19.1 PROFIT</title>
 <link rel="manifest" href="manifest.json">
 <style>
 html,body{overscroll-behavior:none!important;overscroll-behavior-y:none!important;touch-action:none!important;position:fixed!important;overflow:hidden!important;width:100%;height:100%;margin:0;padding:0;background:#0f0e17}
 #gameWrapper{overscroll-behavior:none!important;touch-action:pan-x pan-y!important;width:100%;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;align-items:center;padding-top:6px}
 </style>
 <script>
-// منع السحب للبيتزا قبل كلشي
 let _sy=0;
 document.addEventListener('touchstart',e=>{if(e.touches.length===1)_sy=e.touches[0].clientY;},{passive:true,capture:true});
 document.addEventListener('touchmove',e=>{
@@ -20,15 +19,14 @@ document.addEventListener('touchmove',e=>{
   const wrap=document.getElementById('gameWrapper');
   if((!wrap || wrap.scrollTop<=0) && dy>0){ e.preventDefault(); e.stopPropagation(); return false; }
 },{passive:false,capture:true});
-
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('sw.js?v=19').then(reg=>{
+    navigator.serviceWorker.register('sw.js?v=19.1').then(reg=>{
       reg.addEventListener('updatefound',()=>{
         const nw=reg.installing;
         nw.addEventListener('statechange',()=>{
           if(nw.state==='installed' && navigator.serviceWorker.controller){
-            window.updateAvailable=true; showUpdateButtons('v19');
+            window.updateAvailable=true; showUpdateButtons('v19.1');
           }
         });
       });
@@ -87,26 +85,24 @@ button{background:#ff8906;color:#000;border:none;padding:10px 16px;border-radius
 <button class="diffBtn" onclick="pickDiff('mid')" style="background:#ffbe0b">🟡 وسط OFFLINE</button>
 <button class="diffBtn" onclick="pickDiff('hard')" style="background:#ff4500;color:#fff">🔴 صعب OFFLINE</button>
 <div id="missionsBox" style="width:100%;max-width:320px;margin-top:10px"></div>
-<p style="font-size:10px;color:#00ff88;margin-top:8px">v19 FINAL - ممنوع البيتزا نهائياً 🍕❌</p>
+<p style="font-size:10px;color:#00ff88;margin-top:8px">v19.1 PROFIT - اجمع عملات 💰</p>
 </div>
 <div id="diffOv"><h2 id="diffTitle" style="color:#ff8906">جاهز؟</h2><p id="diffDesc"></p><button onclick="start()" style="margin-top:14px;padding:14px 30px;font-size:18px">ابدأ ▶️</button><button onclick="closeDiff()" style="background:#333;color:#fff;margin-top:8px">رجوع</button></div>
 <div id="shop">
-<h2 style="color:#ff8906">🛒 المتجر</h2>
+<h2 style="color:#ff8906">🛒 المتجر - اجمع عملات!</h2>
 <p>رصيدك: <b id="shopCoins" style="color:#ffbe0b">0</b> 🪙 <span id="shareStatus" style="font-size:11px"></span></p>
-<button onclick="watchAd()" style="background:#00ff88;width:100%;max-width:400px;margin:8px 0">📺 إعلان +10</button>
-<button onclick="shareGame()" style="background:#00d4ff;width:100%;max-width:400px">📤 مشاركة = 🥷</button>
+<button onclick="watchAd()" style="background:#00ff88;width:100%;max-width:400px;margin:8px 0">📺 شاهد إعلان +10 🪙</button>
+<button onclick="shareGame()" style="background:#00d4ff;width:100%;max-width:400px">📤 شارك = افتح 🥷 مجاناً</button>
 <div id="skinsList" style="width:100%;display:flex;flex-direction:column;align-items:center;margin-top:6px"></div>
-<div style="background:#1e1e2e;border:2px dashed #ff8906;border-radius:14px;padding:10px;margin-top:10px;width:100%;max-width:400px;text-align:right">
-<p style="font-size:11px;color:#aaa">أكواد: COINS100 / RBOOSH-GOLD</p>
-<div style="display:flex;gap:6px;margin-top:6px"><input id="codeInp" placeholder="كود" style="flex:1;padding:10px;border-radius:20px;border:none;text-align:center"><button onclick="redeem()" style="background:#00ff88">فك</button></div>
+<div style="background:#1e1e2e;border:1px solid #333;border-radius:14px;padding:10px;margin-top:10px;width:100%;max-width:400px;text-align:right">
+<p style="font-size:11px;color:#888">عندك كود هدية من التيك توك؟</p>
+<div style="display:flex;gap:6px;margin-top:6px"><input id="codeInp" placeholder="ادخل الكود" style="flex:1;padding:10px;border-radius:20px;border:none;text-align:center"><button onclick="redeem()" style="background:#00ff88">فك</button></div>
 </div>
 <button onclick="closeShop()" style="margin-top:10px;background:#333;color:#fff">رجوع</button>
 </div>
-<div id="adOv"><h2 style="color:#00ff88">📺 إعلان</h2><div style="background:#fff;color:#000;width:100%;max-width:320px;height:200px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:14px 0;font-weight:900">RBooSH v19 🫓</div><p>انتظر <b id="adTimer" style="color:#ffbe0b;font-size:22px">5</b> ث...</p><button id="adClaim" onclick="claimAd()" style="display:none;background:#00ff88;margin-top:12px">خذ 10 🪙</button><button onclick="closeAd()" style="margin-top:10px;background:#333;color:#fff">تخطي ❌</button></div>
+<div id="adOv"><h2 style="color:#00ff88">📺 إعلان</h2><div style="background:#fff;color:#000;width:100%;max-width:320px;height:200px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:14px 0;font-weight:900">RBooSH v19.1 🫓</div><p>انتظر <b id="adTimer" style="color:#ffbe0b;font-size:22px">5</b> ث...</p><button id="adClaim" onclick="claimAd()" style="display:none;background:#00ff88;margin-top:12px">خذ 10 🪙</button><button onclick="closeAd()" style="margin-top:10px;background:#333;color:#fff">تخطي ❌</button></div>
 </div>
-
 <button id="updateBtn" onclick="forceUpdate()">🆕 تحديث جديد <span id="newVerTxt"></span> 🔄</button>
-
 <div id="footerLink">
 🔗 رابط اللعبة<br>
 <a href="https://rboosh.github.io/rboosh-game/" target="_blank">https://rboosh.github.io/rboosh-game/</a>
@@ -114,15 +110,13 @@ button{background:#ff8906;color:#000;border:none;padding:10px 16px;border-radius
 <button onclick="navigator.clipboard.writeText('https://rboosh.github.io/rboosh-game/');alert('تم النسخ 📋')" style="padding:7px 14px;font-size:11px;background:#333;color:#fff">📋 نسخ الرابط</button>
 <button onclick="shareGame()" style="padding:7px 14px;font-size:11px;background:#00d4ff;color:#000">📤 مشاركة</button>
 </div>
-<div style="margin-top:6px;color:#555;font-size:10px">RBooSH v19 © 2026 - OFFLINE FINAL ✅</div>
+<div style="margin-top:6px;color:#555;font-size:10px">RBooSH v19.1 PROFIT © 2026</div>
 </div>
 </div>
-
 <script>
-const VERSION='v19';
+const VERSION='v19.1';
 window.updateAvailable=false;
 let LATEST_VER=VERSION;
-
 async function checkForUpdate(){
   try{
     if(!navigator.onLine){hideUpdateButtons();return;}
@@ -148,17 +142,33 @@ function updateOnlineStatus(){
 }
 window.addEventListener('online',updateOnlineStatus); window.addEventListener('offline',updateOnlineStatus);
 setTimeout(()=>{if(navigator.serviceWorker && navigator.serviceWorker.controller){localStorage.setItem('rHasOffline','1');} checkForUpdate();},1200);
-
 const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
 let p,it,ob,pws,sc,coins=parseInt(localStorage.getItem('rCoins')||0),best=localStorage.getItem('rB')||0,run=false,sp=3.5,fr=0,adCooldown=false,diff='mid';
 let curSkin=localStorage.getItem('rSkin')||'🧒'; let owned=JSON.parse(localStorage.getItem('rOwned')||'["🧒"]'); let soundOn=localStorage.getItem('rSound')!=='0'; let shareUsed=localStorage.getItem('rShareUsed')==='1';
 let magnetUntil=0,shieldUntil=0,wingExtra=0,hasHeart=false;
 const DIFFS={easy:{sp:2.6,hole:115,bread:70,name:'مبتدأ'},mid:{sp:3.8,hole:86,bread:58,name:'وسط'},hard:{sp:5.2,hole:62,bread:48,name:'صعب'}};
 const SKIN_POWER={'🧒':{mult:1,jump:-18,jumps:2,magnet:0,slow:1,shield:0,name:'عادي',color:'#888'},'👨‍🍳':{mult:1.2,jump:-18,jumps:2,magnet:0,slow:1,shield:0,name:'+20%',color:'#ffbe0b'},'🧑‍🌾':{mult:1.3,jump:-18.5,jumps:2,magnet:20,slow:1,shield:0,name:'+30%',color:'#ffbe0b'},'👳':{mult:1.5,jump:-18.5,jumps:2,magnet:30,slow:1,shield:0,name:'+50%',color:'#ffbe0b'},'🤠':{mult:1.6,jump:-19,jumps:2,magnet:40,slow:1,shield:0,name:'+60%',color:'#ffbe0b'},'🥷':{mult:1.8,jump:-20,jumps:2,magnet:50,slow:0.9,shield:0,name:'+80%',color:'#00ff88'},'👨‍🎤':{mult:2,jump:-19.5,jumps:2,magnet:60,slow:1,shield:0,name:'x2',color:'#00ff88'},'🧙‍♂️':{mult:2.2,jump:-20,jumps:3,magnet:70,slow:0.9,shield:0,name:'x2.2',color:'#00ff88'},'❄️':{mult:2.5,jump:-19,jumps:2,magnet:50,slow:0.75,shield:1,name:'x2.5',color:'#00d4ff'},'👑':{mult:3,jump:-20.5,jumps:3,magnet:90,slow:0.85,shield:1,name:'x3',color:'#ffbe0b'},'🔥':{mult:3.5,jump:-21,jumps:3,magnet:100,slow:0.8,shield:1,name:'x3.5',color:'#ff4500'},'⚡':{mult:4,jump:-21,jumps:3,magnet:120,slow:0.75,shield:1,name:'x4',color:'#ff0'},'💎':{mult:5,jump:-22,jumps:4,magnet:150,slow:0.7,shield:2,name:'x5',color:'#00ffff'},'👽':{mult:4.5,jump:-23,jumps:4,magnet:130,slow:0.7,shield:1,name:'x4.5',color:'#a0f'},'🤖':{mult:5.5,jump:-21,jumps:5,magnet:160,slow:0.65,shield:2,name:'x5.5',color:'#0f0'},'🐯':{mult:6,jump:-22,jumps:4,magnet:180,slow:0.6,shield:3,name:'x6',color:'#ff8906'}};
-const SKINS=[{id:'🧒',name:'العادي',price:0},{id:'👨‍🍳',name:'الخباز',price:20},{id:'🧑‍🌾',name:'المزارع',price:40},{id:'👳',name:'العقال',price:60},{id:'🤠',name:'الكاوبوي',price:80},{id:'🥷',name:'النينجا',price:0,code:'SHARE'},{id:'👨‍🎤',name:'الروك',price:100},{id:'🧙‍♂️',name:'الساحر',price:120},{id:'❄️',name:'الثلجي',price:150},{id:'👑',name:'الملك',price:0,code:'RBOOSH-GOLD'},{id:'🔥',name:'الناري',price:0,code:'RBOOSH-FIRE'},{id:'⚡',name:'البرق',price:200},{id:'💎',name:'الماسي',price:0,code:'RBOOSH-DIAMOND'},{id:'👽',name:'الفضائي',price:300},{id:'🤖',name:'الروبوت',price:400},{id:'🐯',name:'النمر',price:500}];
+const SKINS=[
+{id:'🧒',name:'العادي',price:0},
+{id:'👨‍🍳',name:'الخباز',price:30},
+{id:'🧑‍🌾',name:'المزارع',price:60},
+{id:'👳',name:'العقال',price:100},
+{id:'🤠',name:'الكاوبوي',price:150},
+{id:'🥷',name:'النينجا',price:0,share:true},
+{id:'👨‍🎤',name:'الروك',price:200},
+{id:'🧙‍♂️',name:'الساحر',price:250},
+{id:'❄️',name:'الثلجي',price:300},
+{id:'👑',name:'الملك',price:400},
+{id:'🔥',name:'الناري',price:450},
+{id:'⚡',name:'البرق',price:500},
+{id:'💎',name:'الماسي',price:600},
+{id:'👽',name:'الفضائي',price:700},
+{id:'🤖',name:'الروبوت',price:800},
+{id:'🐯',name:'النمر',price:1000},
+];
 let audioCtx; function beep(f,d,v=0.2){if(!soundOn)return;try{if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)(); const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=f;o.connect(g);g.connect(audioCtx.destination);g.gain.value=v;o.start();g.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+d);o.stop(audioCtx.currentTime+d);}catch(e){}}
 function toggleSound(){soundOn=!soundOn;localStorage.setItem('rSound',soundOn?'1':'0');document.getElementById('soundBtn').textContent=soundOn?'🔊':'🔇';beep(600,0.2);}
-async function shareGame(){const url='https://rboosh.github.io/rboosh-game/'; if(navigator.onLine){try{if(navigator.share) await navigator.share({title:'RBooSH',text:'جرب RBooSH ✈️ '+url,url}); else {await navigator.clipboard.writeText(url); alert('نسخ: '+url);} }catch(e){}} if(!shareUsed){shareUsed=true; localStorage.setItem('rShareUsed','1'); if(!owned.includes('🥷')){owned.push('🥷'); localStorage.setItem('rOwned',JSON.stringify(owned)); alert('مبروك 🥷!');} renderDaily(); renderSkins();}}
+async function shareGame(){const url='https://rboosh.github.io/rboosh-game/'; if(navigator.onLine){try{if(navigator.share) await navigator.share({title:'RBooSH',text:'جرب RBooSH ✈️ '+url,url}); else {await navigator.clipboard.writeText(url); alert('نسخ: '+url);} }catch(e){}} if(!shareUsed){shareUsed=true; localStorage.setItem('rShareUsed','1'); if(!owned.includes('🥷')){owned.push('🥷'); localStorage.setItem('rOwned',JSON.stringify(owned)); alert('مبروك 🥷 فتحته بالشير!');} renderDaily(); renderSkins();}}
 function renderDaily(){const today=new Date().toDateString(); const box=document.getElementById('dailyBox'); if(localStorage.getItem('rDaily')!==today){box.innerHTML=`<b>🎁 مكافأة يومية</b><br><button onclick="claimDaily()" style="background:#ffbe0b;margin-top:6px">خذ 20 🪙</button>`;}else{box.innerHTML=`✅ أخذت مكافأة اليوم`;} document.getElementById('ovCoins').textContent=coins; document.getElementById('best').textContent=best; document.getElementById('shareStatus').textContent=shareUsed?'✅':'📤'; const missions=JSON.parse(localStorage.getItem('rMissions')||'{"bread":0,"score":0,"magnet":0}'); document.getElementById('missionsBox').innerHTML=`<p style="color:#ffbe0b;font-size:12px">📋 مهمات</p><div class="mission"><span>30 خبزة (${missions.bread}/30)</span><span>${missions.bread>=30?'✅':'⏳'}</span></div><div class="mission"><span>50 نقطة (${missions.score}/50)</span><span>${missions.score>=50?'✅':'⏳'}</span></div><div class="mission"><span>مغناطيس 3 (${missions.magnet}/3)</span><span>${missions.magnet>=3?'✅':'⏳'}</span></div>`;}
 function claimDaily(){const today=new Date().toDateString(); if(localStorage.getItem('rDaily')===today) return; localStorage.setItem('rDaily',today); coins+=20; localStorage.setItem('rCoins',coins); document.getElementById('coins').textContent=coins; beep(800,0.3); renderDaily();}
 function openWheel(){const last=parseInt(localStorage.getItem('rWheel')||0); const now=Date.now(); if(now-last<6*3600*1000){alert('كل 6 ساعات');return;} const rewards=[10,20,30,50,100,'🥷','💎']; const r=rewards[Math.floor(Math.random()*rewards.length)]; localStorage.setItem('rWheel',now+''); if(typeof r==='number'){coins+=r; localStorage.setItem('rCoins',coins); document.getElementById('coins').textContent=coins; alert('ربحت '+r+' 🪙!');} else {if(!owned.includes(r)){owned.push(r); localStorage.setItem('rOwned',JSON.stringify(owned)); alert('ربحت '+r);} else {coins+=50; localStorage.setItem('rCoins',coins);}} renderDaily(); renderSkins();}
@@ -171,14 +181,37 @@ function jump(){if(run) p.jump();}
 canvas.addEventListener('touchstart',e=>{e.preventDefault();jump()},{passive:false});canvas.addEventListener('mousedown',jump);document.addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();jump()}});
 function updatePowBar(){const bar=document.getElementById('powBar'); const now=Date.now(); let txt=[]; if(magnetUntil>now) txt.push('🧲 '+(Math.ceil((magnetUntil-now)/1000))+'ث'); if(shieldUntil>now) txt.push('🛡️'); if(wingExtra>0) txt.push('🪽'); if(hasHeart) txt.push('❤️'); if(txt.length){bar.style.display='flex'; bar.textContent=txt.join(' | ');} else bar.style.display='none';}
 function loop(){if(!run) return; fr++; ctx.clearRect(0,0,400,720); const cfg=DIFFS[diff]; if(fr%cfg.bread==0){let yy,isHigh=false; const rr=Math.random(); if(rr<0.33){yy=Math.random()*100+80;isHigh=true;} else if(rr<0.66){yy=Math.random()*140+240;} else {yy=Math.random()*100+450;} it.push({x:400,y:yy,w:30,h:30,done:false,high:isHigh})} if(fr%cfg.hole==0) ob.push({x:400,y:590,w:34,h:30}); if(fr%3600==0) pws.push({x:400,y:Math.random()*300+100,type:'🧲',w:30,h:30}); if(fr%2700==0) pws.push({x:400,y:Math.random()*300+100,type:'🪽',w:30,h:30}); if(fr%4500==0) pws.push({x:400,y:Math.random()*300+100,type:'🛡️',w:30,h:30}); if(fr%5400==0) pws.push({x:400,y:Math.random()*300+150,type:'❤️',w:30,h:30}); const now=Date.now(); const curPow=SKIN_POWER[curSkin]; for(let i of it){if(!i.done){let magR=curPow.magnet+(magnetUntil>now?150:0); if(magR>0){const dx=p.x-i.x, dy=(p.y+15)-i.y; const dist=Math.sqrt(dx*dx+dy*dy); if(dist<magR){i.x+=(p.x-i.x)*0.18; i.y+=((p.y+15)-i.y)*0.18;}}} i.x-=sp*curPow.slow; ctx.font=i.high?'34px serif':'30px serif'; ctx.fillText('🫓',i.x,i.y); if(!i.done&&i.x<p.x+p.w&&i.x+i.w>p.x&&i.y<p.y+p.h+10&&i.y+i.h>p.y){i.done=true; let add=Math.floor((i.high?2:1)*curPow.mult); sc+=(i.high?2:1); coins+=add; localStorage.setItem('rCoins',coins); let mis=JSON.parse(localStorage.getItem('rMissions')||'{"bread":0,"score":0,"magnet":0}'); mis.bread++; mis.score=sc; localStorage.setItem('rMissions',JSON.stringify(mis)); document.getElementById('score').textContent=sc; document.getElementById('coins').textContent=coins; beep(800,0.1); if(sc%10==0) sp+=0.3;}} it=it.filter(x=>!x.done&&x.x>-50); for(let pw of pws){pw.x-=sp*curPow.slow; ctx.font='28px serif'; ctx.fillText(pw.type,pw.x,pw.y); if(pw.x<p.x+p.w&&pw.x+pw.w>p.x&&pw.y<p.y+p.h&&pw.y+pw.h>p.y){pw.done=true; if(pw.type==='🧲'){magnetUntil=now+15000; let mis=JSON.parse(localStorage.getItem('rMissions')||'{"bread":0,"score":0,"magnet":0}'); mis.magnet++; localStorage.setItem('rMissions',JSON.stringify(mis));} if(pw.type==='🛡️'){shieldUntil=now+20000;} if(pw.type==='🪽'){wingExtra=1; setTimeout(()=>wingExtra=0,15000);} if(pw.type==='❤️'){hasHeart=true;} beep(900,0.3);}} pws=pws.filter(x=>!x.done&&x.x>-60); for(let o of ob){o.x-=sp*curPow.slow; ctx.font='34px serif'; ctx.fillText('🕳️',o.x,o.y+25); if(o.x<p.x+p.w-10&&o.x+o.w>p.x+10&&o.y<p.y+p.h&&o.y+o.h>p.y){if(shieldUntil>now||p.shield>0){if(p.shield>0) p.shield--; else shieldUntil=0; ob=ob.filter(x=>x!==o); continue;} if(hasHeart){hasHeart=false; ob=ob.filter(x=>x!==o); continue;} return over();}} ob=ob.filter(x=>x.x>-50); p.upd(); p.draw(); updatePowBar(); ctx.fillStyle='#ff8906'; ctx.fillRect(0,620,400,8); requestAnimationFrame(loop);}
-function over(){run=false; if(sc>best){best=sc; localStorage.setItem('rB',best);} beep(200,0.6,0.4); const ov=document.getElementById('ov'); ov.style.display='flex'; let updateBtnHtml=''; if(window.updateAvailable){updateBtnHtml=`<button id="updateBtnOver" onclick="forceUpdate()" style="background:#00ff88;color:#000;width:100%;border:2px solid #00ff88;animation:pulse 1s infinite;display:block">🆕 تحديث ${LATEST_VER} 🔄</button>`;} ov.innerHTML=`<h1 style="color:#ffbe0b">جبت ${sc} خبزة! ${!navigator.onLine?'OFFLINE':''}</h1><p>${DIFFS[diff].name} | معك ${coins} 🪙</p><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;width:100%;max-width:320px"><div style="display:flex;gap:6px"><button onclick="document.getElementById('ov').style.display='none';pickDiff('${diff}')" style="flex:1">مرة تانية</button><button onclick="openShop()" style="flex:1;background:#00ff88">متجر</button></div><button onclick="watchAd()" style="background:#ffbe0b">📺 إعلان</button><button onclick="shareGame()" style="background:#00d4ff">📤 شارك</button>${updateBtnHtml}<button onclick="location.reload()" style="background:#333;color:#fff">غير الصعوبة</button></div>`; renderDaily();}
+function over(){run=false; if(sc>best){best=sc; localStorage.setItem('rB',best);} beep(200,0.6,0.4); const ov=document.getElementById('ov'); ov.style.display='flex'; let updateBtnHtml=''; if(window.updateAvailable){updateBtnHtml=`<button id="updateBtnOver" onclick="forceUpdate()" style="background:#00ff88;color:#000;width:100%;border:2px solid #00ff88;animation:pulse 1s infinite;display:block">🆕 تحديث ${LATEST_VER} 🔄</button>`;} ov.innerHTML=`<h1 style="color:#ffbe0b">جبت ${sc} خبزة! ${!navigator.onLine?'OFFLINE':''}</h1><p>${DIFFS[diff].name} | معك ${coins} 🪙</p><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;width:100%;max-width:320px"><div style="display:flex;gap:6px"><button onclick="document.getElementById('ov').style.display='none';pickDiff('${diff}')" style="flex:1">مرة تانية</button><button onclick="openShop()" style="flex:1;background:#00ff88">متجر</button></div><button onclick="watchAd()" style="background:#ffbe0b">📺 إعلان +10</button><button onclick="shareGame()" style="background:#00d4ff">📤 شارك</button>${updateBtnHtml}<button onclick="location.reload()" style="background:#333;color:#fff">غير الصعوبة</button></div>`; renderDaily();}
 function openShop(){document.getElementById('shop').style.display='flex'; renderSkins();}
 function closeShop(){document.getElementById('shop').style.display='none'; if(!run) document.getElementById('ov').style.display='flex';}
-function renderSkins(){document.getElementById('shopCoins').textContent=coins; const l=document.getElementById('skinsList'); l.innerHTML=''; SKINS.forEach(s=>{const o=owned.includes(s.id),c=curSkin==s.id; const pow=SKIN_POWER[s.id]; const d=document.createElement('div'); d.className='skin '+(o?'owned ':'')+(c?'selected':''); let btn=c?'✅':o?`<button onclick="selectSkin('${s.id}')">استخدم</button>`:s.id==='🥷'?`<button onclick="shareGame()" style="background:#00d4ff">📤</button>`:s.code?`<button onclick="buyReal('${s.id}')" style="background:${pow.color}">شراء</button>`:`<button onclick="buySkin('${s.id}',${s.price})">${s.price} 🪙</button>`; d.innerHTML=`<div style="display:flex;align-items:center;gap:10px"><span style="font-size:26px">${s.id}</span><div style="text-align:right"><div style="font-size:12px">${s.name}</div><div style="font-size:10px;color:${pow.color}">⚡ ${pow.name}</div></div></div><div>${btn}</div>`; l.appendChild(d)})}
-function buySkin(id,pr){if(coins>=pr){coins-=pr; owned.push(id); localStorage.setItem('rCoins',coins); localStorage.setItem('rOwned',JSON.stringify(owned)); document.getElementById('coins').textContent=coins; selectSkin(id);} else alert('ما عندك عملات!');}
-function buyReal(id){const s=SKINS.find(x=>x.id==id); alert('كود: '+s.code);}
+function renderSkins(){document.getElementById('shopCoins').textContent=coins; const l=document.getElementById('skinsList'); l.innerHTML=''; SKINS.forEach(s=>{const o=owned.includes(s.id),c=curSkin==s.id; const pow=SKIN_POWER[s.id]; const d=document.createElement('div'); d.className='skin '+(o?'owned ':'')+(c?'selected':''); let btn=c?'✅':o?`<button onclick="selectSkin('${s.id}')">استخدم</button>`:s.share?`<button onclick="shareGame()" style="background:#00d4ff">📤 شير</button>`:`<button onclick="buySkin('${s.id}',${s.price})">${s.price} 🪙</button>`; d.innerHTML=`<div style="display:flex;align-items:center;gap:10px"><span style="font-size:26px">${s.id}</span><div style="text-align:right"><div style="font-size:12px">${s.name}</div><div style="font-size:10px;color:${pow.color}">⚡ ${pow.name}</div></div></div><div>${btn}</div>`; l.appendChild(d)})}
+function buySkin(id,pr){if(coins>=pr){coins-=pr; owned.push(id); localStorage.setItem('rCoins',coins); localStorage.setItem('rOwned',JSON.stringify(owned)); document.getElementById('coins').textContent=coins; selectSkin(id);} else alert('ما عندك عملات! لازم تشوف إعلانات 📺');}
 function selectSkin(id){curSkin=id; localStorage.setItem('rSkin',id); renderSkins();}
-function redeem(){const code=document.getElementById('codeInp').value.trim().toUpperCase(); if(code==='COINS100'){coins+=100;localStorage.setItem('rCoins',coins);document.getElementById('coins').textContent=coins;renderSkins();alert('100 🪙');return} const s=SKINS.find(x=>x.code==code); if(s){if(!owned.includes(s.id)){owned.push(s.id); localStorage.setItem('rOwned',JSON.stringify(owned));} selectSkin(s.id); alert(s.name);} else alert('كود غلط');}
+function redeem(){
+  const code=document.getElementById('codeInp').value.trim().toUpperCase();
+  if(!code) return;
+  const secretCodes={
+    'RBOO':20,
+    'RBOOSH20':20,
+    'TIKTOK':30,
+    'RBOOSH':50,
+    'HASAKA':50,
+    'COINS100':20
+  };
+  if(secretCodes[code]){
+    const amount=secretCodes[code];
+    const usedKey='used_'+code;
+    if(localStorage.getItem(usedKey)==='1'){ alert('استخدمت هاد الكود قبل!'); return; }
+    coins+=amount;
+    localStorage.setItem('rCoins',coins);
+    localStorage.setItem(usedKey,'1');
+    document.getElementById('coins').textContent=coins;
+    renderSkins();
+    alert('مبروك +'+amount+' 🪙');
+  } else {
+    alert('كود غلط ❌ تابعني عالتيك توك للاكواد');
+  }
+}
 function watchAd(){if(adCooldown){alert('انتظر 30ث');return} document.getElementById('adOv').style.display='flex'; let t=5;document.getElementById('adTimer').textContent=t;document.getElementById('adClaim').style.display='none'; const iv=setInterval(()=>{t--;document.getElementById('adTimer').textContent=t;if(t<=0){clearInterval(iv);document.getElementById('adTimer').textContent='خلص!';document.getElementById('adClaim').style.display='block';}},1000);}
 function claimAd(){coins+=10; localStorage.setItem('rCoins',coins); document.getElementById('coins').textContent=coins; document.getElementById('shopCoins').textContent=coins; document.getElementById('adOv').style.display='none'; renderSkins(); adCooldown=true; setTimeout(()=>{adCooldown=false},30000);}
 function closeAd(){document.getElementById('adOv').style.display='none';}
