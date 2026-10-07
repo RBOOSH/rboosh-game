@@ -3,9 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>RBooSH v14</title>
+<title>RBooSH v15 OFFLINE</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ff8906">
+<script>
+// OFFLINE PWA - تسجيل فوري
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js?v=15').then(reg => {
+      console.log('OFFLINE جاهز ✅');
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        newWorker.addEventListener('statechange', () => {
+          if(newWorker.state === 'installed' && navigator.serviceWorker.controller){
+            if(confirm('🆕 في تحديث جديد! تحدث هلا؟')){
+              newWorker.postMessage({action:'skipWaiting'});
+            }
+          }
+        });
+      });
+    });
+    let refreshing=false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if(!refreshing){ refreshing=true; location.reload(); }
+    });
+  });
+}
+</script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Tajawal',sans-serif}
@@ -24,11 +48,12 @@ button{background:#ff8906;color:#000;border:none;padding:10px 16px;border-radius
 #footerLink{margin-top:10px;text-align:center;font-size:11px;color:#888;width:95vw;max-width:420px;background:#1a1a2e;border-radius:12px;padding:10px;line-height:1.6}
 #footerLink a{color:#ff8906;text-decoration:none;word-break:break-all;font-size:12px}
 @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+.offlineBadge{background:#00ff88;color:#000;padding:3px 8px;border-radius:20px;font-size:10px;display:none}
 </style>
 </head>
 <body>
 <div id="h">
-<div>🫓 <span id="score">0</span></div>
+<div>🫓 <span id="score">0</span> <span id="offlineBadge" class="offlineBadge">OFFLINE ✅</span></div>
 <div>💰 <span id="coins">0</span></div>
 <div style="display:flex;gap:4px">
 <button class="iconBtn" onclick="toggleSound()" id="soundBtn">🔊</button>
@@ -49,45 +74,70 @@ button{background:#ff8906;color:#000;border:none;padding:10px 16px;border-radius
 <button onclick="shareGame()" style="background:#00ff88">📤 شارك وافتح 🥷</button>
 </div>
 <p style="color:#ffbe0b;margin-top:10px;font-weight:900">اختر الصعوبة:</p>
-<button class="diffBtn" onclick="pickDiff('easy')" style="background:#00ff88">🟢 مبتدأ</button>
-<button class="diffBtn" onclick="pickDiff('mid')" style="background:#ffbe0b">🟡 وسط</button>
-<button class="diffBtn" onclick="pickDiff('hard')" style="background:#ff4500;color:#fff">🔴 صعب</button>
+<button class="diffBtn" onclick="pickDiff('easy')" style="background:#00ff88">🟢 مبتدأ - OFFLINE</button>
+<button class="diffBtn" onclick="pickDiff('mid')" style="background:#ffbe0b">🟡 وسط - OFFLINE</button>
+<button class="diffBtn" onclick="pickDiff('hard')" style="background:#ff4500;color:#fff">🔴 صعب - OFFLINE</button>
 <div id="missionsBox" style="width:100%;max-width:320px;margin-top:10px"></div>
+<p style="font-size:10px;color:#00ff88;margin-top:8px">✅ تشتغل بدون انترنت</p>
 </div>
 <div id="diffOv"><h2 id="diffTitle" style="color:#ff8906">جاهز؟</h2><p id="diffDesc"></p><button onclick="start()" style="margin-top:14px;padding:14px 30px;font-size:18px">ابدأ ▶️</button><button onclick="closeDiff()" style="background:#333;color:#fff;margin-top:8px">رجوع</button></div>
 <div id="shop">
-<h2 style="color:#ff8906">🛒 المتجر</h2>
+<h2 style="color:#ff8906">🛒 المتجر OFFLINE</h2>
 <p>رصيدك: <b id="shopCoins" style="color:#ffbe0b">0</b> 🪙 <span id="shareStatus" style="font-size:11px"></span></p>
-<button onclick="watchAd()" style="background:#00ff88;width:100%;max-width:400px;margin:8px 0">📺 إعلان +10</button>
+<button onclick="watchAd()" style="background:#00ff88;width:100%;max-width:400px;margin:8px 0">📺 إعلان +10 (OFFLINE)</button>
 <button onclick="shareGame()" style="background:#00d4ff;width:100%;max-width:400px">📤 مشاركة عامة = 🥷 مجانا</button>
 <div id="skinsList" style="width:100%;display:flex;flex-direction:column;align-items:center;margin-top:6px"></div>
 <div style="background:#1e1e2e;border:2px dashed #ff8906;border-radius:14px;padding:10px;margin-top:10px;width:100%;max-width:400px;text-align:right">
-<p style="font-size:11px;color:#aaa">أكواد: COINS100 / RBOOSH-GOLD</p>
+<p style="font-size:11px;color:#aaa">أكواد OFFLINE: COINS100 / RBOOSH-GOLD</p>
 <div style="display:flex;gap:6px;margin-top:6px"><input id="codeInp" placeholder="كود" style="flex:1;padding:10px;border-radius:20px;border:none;text-align:center"><button onclick="redeem()" style="background:#00ff88">فك</button></div>
 </div>
 <button onclick="closeShop()" style="margin-top:10px;background:#333;color:#fff">رجوع</button>
 </div>
-<div id="adOv"><h2 style="color:#00ff88">📺 إعلان</h2><div style="background:#fff;color:#000;width:100%;max-width:320px;height:200px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:14px 0;font-weight:900">RBooSH 🫓</div><p>انتظر <b id="adTimer" style="color:#ffbe0b;font-size:22px">5</b> ث...</p><button id="adClaim" onclick="claimAd()" style="display:none;background:#00ff88;margin-top:12px">خذ 10 🪙</button><button onclick="closeAd()" style="margin-top:10px;background:#333;color:#fff">تخطي ❌</button></div>
+<div id="adOv"><h2 style="color:#00ff88">📺 إعلان</h2><div style="background:#fff;color:#000;width:100%;max-width:320px;height:200px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:14px 0;font-weight:900">RBooSH OFFLINE 🫓</div><p>انتظر <b id="adTimer" style="color:#ffbe0b;font-size:22px">5</b> ث...</p><button id="adClaim" onclick="claimAd()" style="display:none;background:#00ff88;margin-top:12px">خذ 10 🪙</button><button onclick="closeAd()" style="margin-top:10px;background:#333;color:#fff">تخطي ❌</button></div>
 </div>
 
-<button id="updateBtn" onclick="forceUpdate()" style="width:95vw;max-width:420px;padding:14px;margin-top:6px;background:#1a1a2e;color:#ffbe0b;border:2px solid #ffbe0b">🔄 تحديث للصفحة - v14 <span style="font-size:10px;color:#888" id="verTxt"></span></button>
+<button id="updateBtn" onclick="forceUpdate()" style="width:95vw;max-width:420px;padding:14px;margin-top:6px;background:#1a1a2e;color:#ffbe0b;border:2px solid #ffbe0b">🔄 تحديث للصفحة - v15 OFFLINE <span style="font-size:10px;color:#888" id="verTxt"></span></button>
 
 <div id="footerLink">
-🔗 رابط اللعبة الرسمي<br>
+🔗 رابط اللعبة<br>
 <a href="https://rboosh.github.io/rboosh-game/" target="_blank">https://rboosh.github.io/rboosh-game/</a>
 <div style="display:flex;gap:6px;justify-content:center;margin-top:8px">
 <button onclick="navigator.clipboard.writeText('https://rboosh.github.io/rboosh-game/');alert('تم النسخ 📋')" style="padding:7px 14px;font-size:11px;background:#333;color:#fff">📋 نسخ الرابط</button>
 <button onclick="shareGame()" style="padding:7px 14px;font-size:11px;background:#00d4ff;color:#000">📤 مشاركة</button>
 </div>
-<div style="margin-top:6px;color:#555;font-size:10px">RBooSH © 2026 - المس الشاشة لتنط 🫓 | صنع بحب ❤️</div>
+<div style="margin-top:6px;color:#555;font-size:10px">RBooSH v15 © 2026 - تشتغل بدون نت ✈️ | صنع بحب ❤️</div>
 </div>
 
 <script>
-const VERSION='v14';
-const LATEST_VERSION='v14'; // بس تنزل v15 غير هون لـ v15
-document.getElementById('verTxt').textContent='('+new Date().toLocaleDateString('ar-SY')+')';
+const VERSION='v15';
+const LATEST_VERSION='v15';
+document.getElementById('verTxt').textContent='('+new Date().toLocaleDateString('ar-SY')+' OFFLINE)';
 
-// تنبيه اذا في نسخة جديدة
+// كشف حالة النت
+function updateOnlineStatus(){
+  const badge=document.getElementById('offlineBadge');
+  if(!navigator.onLine){
+    badge.style.display='inline-block';
+    badge.textContent='OFFLINE ✅';
+    badge.style.background='#00ff88';
+  } else {
+    if(localStorage.getItem('rHasOffline')==='1'){
+      badge.style.display='inline-block';
+      badge.textContent='جاهزة للاوفلاين ✅';
+      badge.style.background='#00d4ff';
+      setTimeout(()=>badge.style.display='none',3000);
+    }
+  }
+}
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+setTimeout(()=>{
+  if('serviceWorker' in navigator && navigator.serviceWorker.controller){
+    localStorage.setItem('rHasOffline','1');
+    updateOnlineStatus();
+  }
+},2000);
+
 if(VERSION!==LATEST_VERSION){
   const b=document.getElementById('updateBtn');
   b.innerHTML='🆕 في تحديث جديد '+LATEST_VERSION+'! اضغط هنا 🔄';
@@ -101,7 +151,7 @@ async function forceUpdate(){
   if('caches' in window){ const keys=await caches.keys(); await Promise.all(keys.map(k=>caches.delete(k))); }
   if('serviceWorker' in navigator){ const regs=await navigator.serviceWorker.getRegistrations(); for(let r of regs) await r.unregister(); }
   localStorage.setItem('rForceUpdate', Date.now());
- }catch(e){ console.log(e); }
+ }catch(e){}
  location.replace('./index.html?v='+Date.now()+'&ver='+VERSION+'&force=1');
 }
 
@@ -112,7 +162,7 @@ let owned=JSON.parse(localStorage.getItem('rOwned')||'["🧒"]');
 let soundOn=localStorage.getItem('rSound')!=='0';
 let shareUsed=localStorage.getItem('rShareUsed')==='1';
 let magnetUntil=0, shieldUntil=0, wingExtra=0, hasHeart=false;
-const DIFFS={ easy:{sp:2.6,hole:115,bread:70,name:'مبتدأ',desc:'بطيئة'}, mid:{sp:3.8,hole:86,bread:58,name:'وسط',desc:'متوازنة'}, hard:{sp:5.2,hole:62,bread:48,name:'صعب',desc:'سريعة 🔥'} };
+const DIFFS={ easy:{sp:2.6,hole:115,bread:70,name:'مبتدأ',desc:'بطيئة OFFLINE'}, mid:{sp:3.8,hole:86,bread:58,name:'وسط',desc:'متوازنة OFFLINE'}, hard:{sp:5.2,hole:62,bread:48,name:'صعب',desc:'سريعة OFFLINE 🔥'} };
 const SKIN_POWER={
  '🧒':{mult:1,jump:-18,jumps:2,magnet:0,slow:1,shield:0,name:'عادي',color:'#888'},
  '👨‍🍳':{mult:1.2,jump:-18,jumps:2,magnet:0,slow:1,shield:0,name:'+20%',color:'#ffbe0b'},
@@ -139,36 +189,38 @@ const SKINS=[
 let audioCtx; function beep(f,d,v=0.2){ if(!soundOn) return; try{ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=f;o.connect(g);g.connect(audioCtx.destination);g.gain.value=v;o.start();g.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+d);o.stop(audioCtx.currentTime+d);}catch(e){} }
 function toggleSound(){ soundOn=!soundOn; localStorage.setItem('rSound',soundOn?'1':'0'); document.getElementById('soundBtn').textContent=soundOn?'🔊':'🔇'; beep(600,0.2); }
 async function shareGame(){
- const url='https://rboosh.github.io/rboosh-game/'; const text='جرب RBooSH 🫓🏃‍♂️ '+url;
- try{
-  if(navigator.share){ await navigator.share({title:'RBooSH',text,url}); }
-  else { await navigator.clipboard.writeText(url); alert('نسخ الرابط: '+url); }
-  if(!shareUsed){ shareUsed=true; localStorage.setItem('rShareUsed','1'); if(!owned.includes('🥷')){ owned.push('🥷'); localStorage.setItem('rOwned',JSON.stringify(owned)); alert('مبروك 🥷 النينجا!'); } renderDaily(); renderSkins(); }
- }catch(e){ try{ await navigator.clipboard.writeText(url); }catch(e2){} }
+ const url='https://rboosh.github.io/rboosh-game/';
+ if(navigator.onLine){
+   try{
+    if(navigator.share){ await navigator.share({title:'RBooSH OFFLINE',text:'جرب RBooSH تشتغل بدون نت 🫓✈️ '+url,url}); }
+    else { await navigator.clipboard.writeText(url); alert('نسخ الرابط: '+url); }
+   }catch(e){}
+ }
+ if(!shareUsed){ shareUsed=true; localStorage.setItem('rShareUsed','1'); if(!owned.includes('🥷')){ owned.push('🥷'); localStorage.setItem('rOwned',JSON.stringify(owned)); alert('مبروك 🥷 النينجا! حتى OFFLINE!'); } renderDaily(); renderSkins(); }
 }
 function renderDaily(){
  const today=new Date().toDateString(); const box=document.getElementById('dailyBox');
- if(localStorage.getItem('rDaily')!==today){ box.innerHTML=`<b>🎁 مكافأة يومية</b><br><button onclick="claimDaily()" style="background:#ffbe0b;margin-top:6px">خذ 20 🪙</button>`; } else { box.innerHTML=`✅ أخذت مكافأة اليوم`; }
+ if(localStorage.getItem('rDaily')!==today){ box.innerHTML=`<b>🎁 مكافأة يومية OFFLINE</b><br><button onclick="claimDaily()" style="background:#ffbe0b;margin-top:6px">خذ 20 🪙</button>`; } else { box.innerHTML=`✅ أخذت مكافأة اليوم OFFLINE`; }
  document.getElementById('ovCoins').textContent=coins; document.getElementById('best').textContent=best;
- document.getElementById('shareStatus').textContent=shareUsed?'✅ شاركت':'📤 شارك لفتح 🥷';
+ document.getElementById('shareStatus').textContent=shareUsed?'✅':'📤 شارك لفتح 🥷';
  const missions=JSON.parse(localStorage.getItem('rMissions')||'{"bread":0,"score":0,"magnet":0}');
- document.getElementById('missionsBox').innerHTML=`<p style="color:#ffbe0b;font-size:12px">📋 مهمات</p><div class="mission"><span>30 خبزة (${missions.bread}/30)</span><span>${missions.bread>=30?'✅':'⏳'}</span></div><div class="mission"><span>50 نقطة (${missions.score}/50)</span><span>${missions.score>=50?'✅':'⏳'}</span></div><div class="mission"><span>مغناطيس 3 (${missions.magnet}/3)</span><span>${missions.magnet>=3?'✅':'⏳'}</span></div>`;
+ document.getElementById('missionsBox').innerHTML=`<p style="color:#ffbe0b;font-size:12px">📋 مهمات OFFLINE</p><div class="mission"><span>30 خبزة (${missions.bread}/30)</span><span>${missions.bread>=30?'✅':'⏳'}</span></div><div class="mission"><span>50 نقطة (${missions.score}/50)</span><span>${missions.score>=50?'✅':'⏳'}</span></div><div class="mission"><span>مغناطيس 3 (${missions.magnet}/3)</span><span>${missions.magnet>=3?'✅':'⏳'}</span></div>`;
 }
 function claimDaily(){ const today=new Date().toDateString(); if(localStorage.getItem('rDaily')===today) return; localStorage.setItem('rDaily',today); coins+=20; localStorage.setItem('rCoins',coins); document.getElementById('coins').textContent=coins; beep(800,0.3); renderDaily(); }
 function openWheel(){
   const last=parseInt(localStorage.getItem('rWheel')||0);
   const now=Date.now();
-  if(now-last<6*3600*1000){ alert('العجلة كل 6 ساعات'); return; }
+  if(now-last<6*3600*1000){ alert('العجلة كل 6 ساعات - OFFLINE'); return; }
   const rewards=[10,20,30,50,100,'🥷','💎'];
   const r=rewards[Math.floor(Math.random()*rewards.length)];
   localStorage.setItem('rWheel',now+'');
-  if(typeof r==='number'){ coins+=r; localStorage.setItem('rCoins',coins); document.getElementById('coins').textContent=coins; alert('ربحت '+r+' 🪙!'); }
-  else { if(!owned.includes(r)){ owned.push(r); localStorage.setItem('rOwned',JSON.stringify(owned)); alert('ربحت سكين '+r); } else { coins+=50; localStorage.setItem('rCoins',coins); } }
+  if(typeof r==='number'){ coins+=r; localStorage.setItem('rCoins',coins); document.getElementById('coins').textContent=coins; alert('ربحت '+r+' 🪙 OFFLINE!'); }
+  else { if(!owned.includes(r)){ owned.push(r); localStorage.setItem('rOwned',JSON.stringify(owned)); alert('ربحت سكين '+r+' OFFLINE'); } else { coins+=50; localStorage.setItem('rCoins',coins); } }
   renderDaily(); renderSkins();
 }
 renderDaily(); document.getElementById('soundBtn').textContent=soundOn?'🔊':'🔇';
 class Pl{ constructor(){ const pow=SKIN_POWER[curSkin]; this.x=60;this.y=570;this.w=38;this.h=50;this.vy=0;this.jumps=0; this.maxJumps=pow.jumps; this.jumpPow=pow.jump; this.shield=pow.shield+(shieldUntil>Date.now()?1:0); this.magnet=pow.magnet; } upd(){ const grav=(curSkin=='👽'?0.7:0.95); this.vy+=grav; this.y+=this.vy; if(this.y>=570){this.y=570;this.vy=0;this.jumps=0} } draw(){ if(this.shield>0||shieldUntil>Date.now()){ ctx.beginPath();ctx.arc(this.x+19,this.y+25,34,0,Math.PI*2);ctx.strokeStyle='#00ff88';ctx.lineWidth=3;ctx.stroke(); } if(magnetUntil>Date.now()){ ctx.beginPath();ctx.arc(this.x+19,this.y+15, this.magnet+magnetUntil%500/10,0,Math.PI*2);ctx.strokeStyle='#00d4ff';ctx.setLineDash([5,5]);ctx.stroke();ctx.setLineDash([]); } ctx.font='40px serif';ctx.fillText(curSkin,this.x-4,this.y+38); } jump(){ const max=this.maxJumps+(wingExtra>0?1:0); if(this.jumps<max){ this.vy=this.jumpPow; this.jumps++; beep(400+this.jumps*100,0.15); } } }
-function pickDiff(d){ diff=d; const cfg=DIFFS[d]; document.getElementById('diffOv').style.display='flex'; document.getElementById('diffTitle').textContent=cfg.name; document.getElementById('diffDesc').textContent=cfg.desc; document.getElementById('ov').style.display='none'; }
+function pickDiff(d){ diff=d; const cfg=DIFFS[d]; document.getElementById('diffOv').style.display='flex'; document.getElementById('diffTitle').textContent=cfg.name; document.getElementById('diffDesc').textContent=cfg.desc+' - OFFLINE ✅'; document.getElementById('ov').style.display='none'; }
 function closeDiff(){ document.getElementById('diffOv').style.display='none'; document.getElementById('ov').style.display='flex'; }
 function start(){ const cfg=DIFFS[diff]; p=new Pl(); it=[]; ob=[]; pws=[]; sc=0; sp=cfg.sp; fr=0; run=true; magnetUntil=0; shieldUntil=0; wingExtra=0; hasHeart=false; document.getElementById('diffOv').style.display='none'; document.getElementById('ov').style.display='none'; document.getElementById('score').textContent=0; loop(); }
 function jump(){ if(run) p.jump(); }
@@ -188,18 +240,17 @@ function loop(){
  for(let o of ob){ o.x-=sp*curPow.slow; ctx.font='34px serif'; ctx.fillText('🕳️',o.x,o.y+25); if(o.x<p.x+p.w-10&&o.x+o.w>p.x+10&&o.y<p.y+p.h&&o.y+o.h>p.y){ if(shieldUntil>now||p.shield>0){ if(p.shield>0) p.shield--; else shieldUntil=0; ob=ob.filter(x=>x!==o); continue; } if(hasHeart){ hasHeart=false; ob=ob.filter(x=>x!==o); continue; } return over(); } } ob=ob.filter(x=>x.x>-50);
  p.upd(); p.draw(); updatePowBar(); ctx.fillStyle='#ff8906'; ctx.fillRect(0,620,400,8); requestAnimationFrame(loop);
 }
-function over(){ run=false; if(sc>best){ best=sc; localStorage.setItem('rB',best); } beep(200,0.6,0.4); const ov=document.getElementById('ov'); ov.style.display='flex'; ov.innerHTML=`<h1 style="color:#ff8906">جبت ${sc} خبزة!</h1><p>${DIFFS[diff].name} | معك ${coins} 🪙</p><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;width:100%;max-width:320px"><div style="display:flex;gap:6px"><button onclick="document.getElementById('ov').style.display='none';pickDiff('${diff}')" style="flex:1">مرة تانية</button><button onclick="openShop()" style="flex:1;background:#00ff88">متجر</button></div><button onclick="watchAd()" style="background:#ffbe0b">📺 إعلان</button><button onclick="shareGame()" style="background:#00d4ff">📤 شارك</button><button onclick="forceUpdate()" style="background:#1a1a2e;color:#ffbe0b;border:2px solid #ffbe0b">🔄 تحديث ${VERSION}</button><button onclick="location.reload()" style="background:#333;color:#fff">غير الصعوبة</button></div>`; renderDaily(); }
+function over(){ run=false; if(sc>best){ best=sc; localStorage.setItem('rB',best); } beep(200,0.6,0.4); const ov=document.getElementById('ov'); ov.style.display='flex'; ov.innerHTML=`<h1 style="color:#ff8906">جبت ${sc} خبزة! OFFLINE</h1><p>${DIFFS[diff].name} | معك ${coins} 🪙</p><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;width:100%;max-width:320px"><div style="display:flex;gap:6px"><button onclick="document.getElementById('ov').style.display='none';pickDiff('${diff}')" style="flex:1">مرة تانية</button><button onclick="openShop()" style="flex:1;background:#00ff88">متجر</button></div><button onclick="watchAd()" style="background:#ffbe0b">📺 إعلان OFFLINE</button><button onclick="shareGame()" style="background:#00d4ff">📤 شارك</button><button onclick="forceUpdate()" style="background:#1a1a2e;color:#ffbe0b;border:2px solid #ffbe0b">🔄 تحديث ${VERSION}</button><button onclick="location.reload()" style="background:#333;color:#fff">غير الصعوبة</button></div>`; renderDaily(); }
 function openShop(){ document.getElementById('shop').style.display='flex'; renderSkins(); }
 function closeShop(){ document.getElementById('shop').style.display='none'; if(!run) document.getElementById('ov').style.display='flex'; }
 function renderSkins(){ document.getElementById('shopCoins').textContent=coins; const l=document.getElementById('skinsList'); l.innerHTML=''; SKINS.forEach(s=>{ const o=owned.includes(s.id),c=curSkin==s.id; const pow=SKIN_POWER[s.id]; const d=document.createElement('div'); d.className='skin '+(o?'owned ':'')+(c?'selected':''); let btn=c?'✅':o?`<button onclick="selectSkin('${s.id}')">استخدم</button>`:s.id==='🥷'?`<button onclick="shareGame()" style="background:#00d4ff">📤 مشاركة</button>`:s.code?`<button onclick="buyReal('${s.id}')" style="background:${pow.color}">شراء</button>`:`<button onclick="buySkin('${s.id}',${s.price})">${s.price} 🪙</button>`; d.innerHTML=`<div style="display:flex;align-items:center;gap:10px"><span style="font-size:26px">${s.id}</span><div style="text-align:right"><div style="font-size:12px">${s.name}</div><div style="font-size:10px;color:${pow.color}">⚡ ${pow.name}</div></div></div><div>${btn}</div>`; l.appendChild(d) }) }
 function buySkin(id,pr){ if(coins>=pr){ coins-=pr; owned.push(id); localStorage.setItem('rCoins',coins); localStorage.setItem('rOwned',JSON.stringify(owned)); document.getElementById('coins').textContent=coins; selectSkin(id); } else alert('ما عندك عملات!'); }
 function buyReal(id){ const s=SKINS.find(x=>x.id==id); alert('كود: '+s.code); }
 function selectSkin(id){ curSkin=id; localStorage.setItem('rSkin',id); renderSkins(); }
-function redeem(){ const code=document.getElementById('codeInp').value.trim().toUpperCase(); if(code==='COINS100'){coins+=100;localStorage.setItem('rCoins',coins);document.getElementById('coins').textContent=coins;renderSkins();alert('100 🪙');return} const s=SKINS.find(x=>x.code==code); if(s){ if(!owned.includes(s.id)){ owned.push(s.id); localStorage.setItem('rOwned',JSON.stringify(owned)); } selectSkin(s.id); alert(s.name); } else alert('كود غلط'); }
-function watchAd(){ if(adCooldown){alert('انتظر 30ث');return} document.getElementById('adOv').style.display='flex'; let t=5;document.getElementById('adTimer').textContent=t;document.getElementById('adClaim').style.display='none'; const iv=setInterval(()=>{t--;document.getElementById('adTimer').textContent=t;if(t<=0){clearInterval(iv);document.getElementById('adTimer').textContent='خلص!';document.getElementById('adClaim').style.display='block';}},1000); }
+function redeem(){ const code=document.getElementById('codeInp').value.trim().toUpperCase(); if(code==='COINS100'){coins+=100;localStorage.setItem('rCoins',coins);document.getElementById('coins').textContent=coins;renderSkins();alert('100 🪙 OFFLINE');return} const s=SKINS.find(x=>x.code==code); if(s){ if(!owned.includes(s.id)){ owned.push(s.id); localStorage.setItem('rOwned',JSON.stringify(owned)); } selectSkin(s.id); alert(s.name+' OFFLINE'); } else alert('كود غلط'); }
+function watchAd(){ if(adCooldown){alert('انتظر 30ث');return} document.getElementById('adOv').style.display='flex'; let t=5;document.getElementById('adTimer').textContent=t;document.getElementById('adClaim').style.display='none'; const iv=setInterval(()=>{t--;document.getElementById('adTimer').textContent=t;if(t<=0){clearInterval(iv);document.getElementById('adTimer').textContent='خلص! OFFLINE';document.getElementById('adClaim').style.display='block';}},1000); }
 function claimAd(){ coins+=10; localStorage.setItem('rCoins',coins); document.getElementById('coins').textContent=coins; document.getElementById('shopCoins').textContent=coins; document.getElementById('adOv').style.display='none'; renderSkins(); adCooldown=true; setTimeout(()=>{adCooldown=false},30000); }
 function closeAd(){ document.getElementById('adOv').style.display='none'; }
-if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js?v=14'); }
 </script>
 </body>
 </html>
