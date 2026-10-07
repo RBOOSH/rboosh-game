@@ -1,7 +1,7 @@
 {
-  "name": "RBooSH v17 OFFLINE",
+  "name": "RBooSH v18 OFFLINE",
   "short_name": "RBooSH",
-  "start_url": "./index.html?v=17",
+  "start_url": "./index.html?v=18",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0f0e17",
