@@ -59,7 +59,30 @@ button{background:#ff8906;color:#000;border:none;padding:10px 16px;border-radius
 </div>
 <button onclick="closeShop()" style="background:#333;color:#fff">رجوع</button>
 
-<div id="adminBox" style="display:none;background:#111;border:1px dashed #0f0;border-radius:12px;padding:12px;margin-top:12px;width:100%;max-width:400px">
+<div id="adminBox" style="display:none;width:100%;max-width:400px;background:#111;border:2px dashed #0f0;padding:12px;border-radius:12px;margin-top:12px">
+<p style="color:#0f0;text-align:center;font-weight:900;margin:0">🔧 مولد الأكواد - أدمن</p>
+<div style="display:flex;gap:6px;margin:10px 0">
+<button onclick="showAdminTab('codes')" id="tabCodesBtn" style="flex:1;background:#0f0;color:#000;padding:10px;border-radius:10px;font-weight:900">🎁 أكواد</button>
+<button onclick="showAdminTab('players')" id="tabPlayersBtn" style="flex:1;background:#333;color:#fff;padding:10px;border-radius:10px;font-weight:900">👥 لاعبين</button>
+</div>
+
+<div id="adminCodesTab">
+<select id="giftValue" style="width:100%;padding:10px;background:#222;color:#fff;border-radius:8px"><option value="50">50 🪙</option><option value="100">100 🪙</option><option value="500">500 🪙</option></select>
+<input id="giftCount" type="number" value="10" style="width:100%;padding:10px;margin:6px 0;background:#222;color:#fff;border-radius:8px">
+<button onclick="generateCodes()" style="width:100%;background:#0f0;color:#000;padding:12px;border-radius:10px">توليد</button>
+<div id="generatedCodes" style="max-height:200px;overflow-y:auto;margin-top:8px"></div>
+</div>
+
+<div id="adminPlayersTab" style="display:none">
+<input id="newPlayerName" placeholder="اسم اللاعب - مثلا: احمد" style="width:100%;padding:10px;margin:4px 0;background:#222;color:#fff;border-radius:8px">
+<input id="newPlayerScore" type="number" placeholder="النقاط - مثلا: 5000" style="width:100%;padding:10px;margin:4px 0;background:#222;color:#fff;border-radius:8px">
+<button onclick="addPlayer()" style="width:100%;background:#00d4ff;color:#000;padding:12px;border-radius:10px;margin:6px 0">➕ إضافة لاعب</button>
+<button onclick="setWeeklyBest()" style="width:100%;background:#ffbe0b;color:#000;padding:10px;border-radius:10px">🏆 تحديد أفضل لاعب</button>
+<input id="customAd" placeholder="إعلان مخصص يظهر فوق" style="width:100%;padding:10px;margin:6px 0;background:#222;color:#fff;border-radius:8px">
+<div style="display:flex;gap:6px"><button onclick="setCustomAd()" style="flex:1;background:#ff8906;padding:10px;border-radius:10px">نشر</button><button onclick="clearCustomAd()" style="flex:1;background:#333;color:#fff;padding:10px;border-radius:10px">حذف</button></div>
+<div id="playersList" style="margin-top:10px;max-height:200px;overflow-y:auto"></div>
+</div>
+</div>
 <p style="color:#0f0;text-align:center">🔧 ADMIN</p>
 <div style="display:flex;gap:4px">
 <button onclick="showAdminTab('codes')" id="tabCodes" style="flex:1;background:#0f0;color:#000">🎁 أكواد</button>
@@ -112,4 +135,20 @@ function claimAd(){coins+=10;localStorage.setItem('rCoins',coins);document.getEl
 document.getElementById('coins').textContent=coins;document.getElementById('ovCoins').textContent=coins;document.getElementById('best').textContent=best;setTimeout(()=>{updateBanner();renderTop10();},300);
 </script>
 </body>
+function showAdminTab(t){
+document.getElementById('adminCodesTab').style.display=t==='codes'?'block':'none';
+document.getElementById('adminPlayersTab').style.display=t==='players'?'block':'none';
+document.getElementById('tabCodesBtn').style.background=t==='codes'?'#0f0':'#333';
+document.getElementById('tabPlayersBtn').style.background=t==='players'?'#0f0':'#333';
+document.getElementById('tabCodesBtn').style.color=t==='codes'?'#000':'#fff';
+document.getElementById('tabPlayersBtn').style.color=t==='players'?'#000':'#fff';
+if(t==='players')renderPlayers();
+}
+function getPlayers(){return JSON.parse(localStorage.getItem('rPlayers')||'[]')}
+function addPlayer(){let n=document.getElementById('newPlayerName').value.trim();let s=parseInt(document.getElementById('newPlayerScore').value)||0;if(!n){alert('اكتب اسم');return}let pl=getPlayers();pl.push({name:n,score:s,id:Date.now()});localStorage.setItem('rPlayers',JSON.stringify(pl));renderPlayers();alert('تم ✅')}
+function renderPlayers(){let pl=getPlayers();let el=document.getElementById('playersList');if(!pl.length){el.innerHTML='<p style=color:#666>لا يوجد لاعبين</p>';return}pl.sort((a,b)=>b.score-a.score);el.innerHTML=pl.map((p,i)=>`<div style="display:flex;justify-content:space-between;background:#1a1a2e;padding:8px;margin:4px 0;border-radius:8px"><span>${i+1}. ${p.name} - ${p.score}</span><button onclick="deletePlayer(${p.id})" style="background:#f44;padding:4px 8px">حذف</button></div>`).join('')}
+function deletePlayer(id){localStorage.setItem('rPlayers',JSON.stringify(getPlayers().filter(x=>x.id!=id)));renderPlayers()}
+function setWeeklyBest(){let pl=getPlayers();if(!pl.length)return;pl.sort((a,b)=>b.score-a.score);localStorage.setItem('rWeeklyBest',JSON.stringify(pl[0]));alert('أفضل: '+pl[0].name)}
+function setCustomAd(){let t=document.getElementById('customAd').value;localStorage.setItem('rCustomAd',t);alert('تم نشر الإعلان')}
+function clearCustomAd(){localStorage.removeItem('rCustomAd');alert('تم الحذف')}
 </html>
