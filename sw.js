@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rboosh-v19-3-fix';
+const CACHE_NAME = 'rboosh-v20-fix';
 const CORE = ['./','./index.html','./manifest.json','./version.json'];
 
 self.addEventListener('install', e=>{
