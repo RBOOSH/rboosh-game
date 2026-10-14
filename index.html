@@ -20,6 +20,7 @@ var SKINS=[
 {id:'🤖',name:'الروبوت',price:80000,desc:'كل المميزات',jumps:1,magnet:120,shield:1,x2:1},
 {id:'🐯',name:'النمر',price:100000,desc:'أسطوري',jumps:2,magnet:150,shield:1,x2:1},
 {id:'👻',name:'الشبح',price:150000,desc:'👻 داش+طيران+اختفاء',jumps:2,magnet:150,shield:1,x2:1,dash:1,glide:1,ghost:1}
+{id:'🦁',name:'الأسد',price:200000,desc:'🦁 درعين+3 قفزات+مغناطيس 200+زئير',jumps:3,magnet:200,shield:2,x2:0,dash:0,glide:0,ghost:0},
 ];
 function getCurSkinObj(){for(var i=0;i<SKINS.length;i++){if(SKINS[i].id===curSkin) return SKINS[i];} return SKINS[0];}
 function Pl(){this.x=60;this.y=570;this.w=38;this.h=50;this.vy=0;this.jumps=0;this.lastJump=0;this.dashing=false;}
