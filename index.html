@@ -67,4 +67,59 @@ function renderTop10(isOver){var pl=getPlayers(); var el=document.getElementById
 function updateBanner(){var b=document.getElementById('topPlayerBanner'); try{var bestW=JSON.parse(localStorage.getItem('rWeeklyBest')||'null'); if(bestW){b.style.display='block'; b.innerHTML='🏆 أفضل لاعب: '+bestW.name+' - '+bestW.score+' 🔥';} else b.style.display='none';}catch(e){}}
 document.getElementById('coins').innerText=coins; document.getElementById('ovCoins').innerText=coins; document.getElementById('best').innerText=best; document.getElementById('shopCoins').innerText=coins;
 setTimeout(function(){updateBanner(); renderTop10();},300);
-</script></body></html>
+</script>
+<!-- 🔊 أصوات لكل السكينات - اختياري -->
+<div style="position:fixed;bottom:12px;left:12px;z-index:9999;display:flex;gap:6px">
+  <button id="soundToggle" onclick="toggleSounds()" style="background:#1a1a2e;color:#fff;border:2px solid #ffbe0b;border-radius:50%;width:46px;height:46px;font-size:20px">🔊</button>
+</div>
+<script>
+let soundEnabled = localStorage.getItem('rSound') !== 'off';
+let audioCtx = null;
+function getCtx(){ if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
+function tone(f,d,t='sine',v=0.3){ if(!soundEnabled) return; try{ let c=getCtx(),o=c.createOscillator(),g=c.createGain(); o.type=t; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v,c.currentTime); g.gain.exponentialRampToValueAtTime(0.01,c.currentTime+d); o.start(); o.stop(c.currentTime+d);}catch(e){} }
+
+function getSkinTier(){
+  try{ let s=typeof getCurSkinObj==='function'?getCurSkinObj():{price:0}; 
+  if(s.price>=100000) return 'legend';
+  if(s.price>=40000) return 'epic';
+  if(s.price>=5000) return 'rare';
+  if(s.price>=500) return 'common';
+  return 'basic';
+  }catch(e){return 'basic';}
+}
+
+function sJump(){
+  let tier=getSkinTier();
+  if(tier==='legend'){ tone(500,0.12,'sine',0.4); setTimeout(()=>tone(900,0.15,'sine',0.3),60); }
+  else if(tier==='epic'){ tone(400,0.15,'triangle',0.4); }
+  else if(tier==='rare'){ tone(350,0.12,'sine',0.35); }
+  else { tone(300,0.1,'sine',0.3); }
+}
+function sCollect(){
+  let tier=getSkinTier();
+  if(tier==='legend'){ tone(1000,0.1,'sine',0.4); setTimeout(()=>tone(1500,0.15,'sine',0.3),50); setTimeout(()=>tone(2000,0.1,'sine',0.2),100); }
+  else if(tier==='epic'){ tone(800,0.12,'sine',0.4); setTimeout(()=>tone(1200,0.12,'sine',0.3),60); }
+  else { tone(700,0.1,'sine',0.35); }
+}
+function sDash(){ tone(150,0.25,'sawtooth',0.35); setTimeout(()=>tone(900,0.2,'sine',0.3),80); }
+function sGhost(){ tone(250,0.6,'triangle',0.25); setTimeout(()=>tone(400,0.4,'sine',0.15),200); }
+function sHit(){ tone(120,0.5,'square',0.5); setTimeout(()=>tone(60,0.3,'sawtooth',0.3),150); }
+
+// Hook بدون تعديل اللعبة
+(function(){
+ if(typeof Pl!=='undefined'){
+   let orig=Pl.prototype.jump;
+   Pl.prototype.jump=function(){ let b=this.jumps; orig.apply(this,arguments); if(this.jumps>b) sJump(); if(this.dashing) sDash(); }
+ }
+ let lastSc=0;
+ setInterval(()=>{ if(typeof sc!=='undefined' && sc>lastSc){ sCollect(); lastSc=sc; } if(typeof ghostActive!=='undefined' && ghostActive===149){ sGhost(); } },40);
+ if(typeof window.over==='function'){
+   let origOver=window.over;
+   window.over=function(){ sHit(); origOver(); }
+ }
+})();
+
+function toggleSounds(){ soundEnabled=!soundEnabled; localStorage.setItem('rSound',soundEnabled?'on':'off'); document.getElementById('soundToggle').innerText=soundEnabled?'🔊':'🔇'; if(soundEnabled) sCollect(); }
+document.getElementById('soundToggle').innerText=soundEnabled?'🔊':'🔇';
+</script>
+</body></html>
